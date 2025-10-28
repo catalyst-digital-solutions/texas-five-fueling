@@ -544,7 +544,7 @@
         "id": 12,
         "title": "Trust/Social Proof Section",
         "description": "Implement the trust section with NextGen Group badge, service guarantees, and animated number counters showcasing business metrics",
-        "status": "pending",
+        "status": "done",
         "dependencies": [
           7
         ],
@@ -558,7 +558,7 @@
             "description": "Create custom SVG icons for each service guarantee (24/7 Service, Licensed & Insured, Fast Response, Experienced Team) and place them in the /public/images/icons/ directory.",
             "dependencies": [],
             "details": "Design four visually consistent SVG icons that clearly represent each guarantee. Export each icon as an individual SVG file named according to its use (e.g., 24-7.svg, license.svg, fast.svg, team.svg) and save them in the /public/images/icons/ directory. Ensure icons are optimized for web and have appropriate alt text for accessibility.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify that each SVG icon displays correctly in the TrustSection component and that the files are present in the specified directory."
           },
           {
@@ -567,7 +567,7 @@
             "description": "Acquire or create the NextGen Group logo and place it in the /public/images/ directory for use in the trust section.",
             "dependencies": [],
             "details": "Source a high-quality NextGen Group logo (preferably in PNG or SVG format). If unavailable, create a simple placeholder logo. Save the logo as nextgen-logo.png (or .svg) in the /public/images/ directory. Ensure the logo has a transparent background and is sized appropriately for display in the TrustSection.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Check that the logo displays crisply in the TrustSection and that the file is accessible at the correct path."
           },
           {
@@ -579,7 +579,7 @@
               2
             ],
             "details": "Use the provided TrustSection.tsx structure. Integrate the NextGen Group logo and guarantee icons, ensuring responsive layout and accessible markup. Style the section using Tailwind CSS for visual consistency. Include a 'Contact Us Today' button that scrolls to the contact form. Ensure all text, icons, and badges are visually clear and mobile-friendly.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test the section on multiple screen sizes, verify all images and icons load, check accessibility (alt text, contrast), and confirm the CTA button scrolls to the contact form."
           },
           {
@@ -588,7 +588,7 @@
             "description": "Add animated number counters for business metrics using Framer Motion's LazyMotion to minimize bundle size impact",
             "dependencies": [],
             "details": "Install and configure Framer Motion with LazyMotion and domAnimation features only. Create an AnimatedCounter component that counts from 0 to target values (years in business: 15+, gallons delivered: 500,000+, customers served: 1,000+). Use useInView hook to trigger animation at 60% viewport entry with once: true option. Implement 2-second duration with ease-out timing using requestAnimationFrame for smooth 60fps animation. Add prefers-reduced-motion check to show final values immediately when reduced motion is preferred. Format large numbers with toLocaleString() for proper thousand separators.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify counters animate smoothly from 0 to target values over 2 seconds. Test viewport trigger occurs at 60% visibility and only fires once. Confirm animation respects prefers-reduced-motion setting. Measure bundle size impact stays within 2.6-10KB range."
           },
           {
@@ -599,7 +599,7 @@
               3
             ],
             "details": "Create CSS keyframe animations for fade-in effect combining opacity (0 to 1) and translateY (10px to 0) transforms. Apply 300ms duration with ease-out timing to NextGen Group badge section. Add staggered fade-in to guarantee cards with 100ms delays between each card (200ms, 300ms, 400ms, 500ms). Include animate-fadeIn utility class that can be reused across components. Ensure animations are disabled when prefers-reduced-motion is active by setting opacity: 1 and animation: none.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify badge fades in smoothly over 300ms when section loads. Test guarantee cards animate with proper stagger timing. Confirm animations are disabled with prefers-reduced-motion. Check CSS animations don't conflict with Framer Motion counter animations."
           }
         ]
@@ -1759,7 +1759,7 @@
     ],
     "metadata": {
       "created": "2025-10-27T19:54:13.545Z",
-      "updated": "2025-10-28T20:45:43.597Z",
+      "updated": "2025-10-28T20:46:32.667Z",
       "description": "Tasks for master context"
     }
   }
