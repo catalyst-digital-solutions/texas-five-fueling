@@ -242,7 +242,7 @@
         "dependencies": [
           5
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -250,7 +250,7 @@
             "description": "Implement a reusable header component that includes site navigation and branding for use across all pages.",
             "dependencies": [],
             "details": "Create Header.tsx in the layout components folder. Include the company logo, navigation links, and action buttons (e.g., phone contact, quote request). Ensure the header is responsive, sticky on scroll, and accessible. Use Next.js conventions for component structure and import necessary UI elements such as Button. Test navigation logic and responsiveness.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Render the header in a test page and verify correct display at various screen sizes. Check that all navigation links and buttons work. Test sticky behavior on scroll and run accessibility checks using Lighthouse."
           },
           {
@@ -259,7 +259,7 @@
             "description": "Implement a reusable footer component that displays contact details, quick links, company information, and copyright notice.",
             "dependencies": [],
             "details": "Create Footer.tsx in the layout components folder. Structure the footer to include contact information (phone, email, location), quick navigation links, company description, and a dynamic copyright year. Ensure the footer is styled for clarity and accessibility, and is consistent across all pages. Use semantic HTML and responsive design practices.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Render the footer in a test page and verify correct display at various screen sizes. Check that all contact links and quick links work. Confirm copyright year updates dynamically and run accessibility checks using Lighthouse."
           }
         ]
@@ -1702,7 +1702,7 @@
     ],
     "metadata": {
       "created": "2025-10-27T19:54:13.545Z",
-      "updated": "2025-10-28T19:58:04.312Z",
+      "updated": "2025-10-28T19:59:20.382Z",
       "description": "Tasks for master context"
     }
   }
