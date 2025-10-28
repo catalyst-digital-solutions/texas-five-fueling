@@ -4,6 +4,7 @@ import { LazyMotion, domAnimation } from 'framer-motion';
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { ViewTransitionProvider } from "@/providers/ViewTransitionProvider";
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -46,11 +47,13 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <LazyMotion features={domAnimation} strict>
         <body className={inter.className}>
-          <Header />
-          <main>
-            {children}
-          </main>
-          <Footer />
+          <ViewTransitionProvider>
+            <Header />
+            <main>
+              {children}
+            </main>
+            <Footer />
+          </ViewTransitionProvider>
         </body>
       </LazyMotion>
     </html>
