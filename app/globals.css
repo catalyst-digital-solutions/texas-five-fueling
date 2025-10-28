@@ -179,3 +179,70 @@ body {
   }
 }
 
+/* ============================================
+   CONTACT FORM ANIMATIONS
+   ============================================ */
+
+/* Success message animation */
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-success-message {
+  animation: slideInFromTop 300ms ease-out;
+}
+
+/* Form field focus transitions */
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  transition: border-color 200ms ease-out, box-shadow 200ms ease-out;
+}
+
+/* Error message fade-in */
+.error-message-container {
+  min-height: 20px; /* Reserve space to prevent layout shift */
+}
+
+.error-message {
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+}
+
+.error-message.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Loading spinner (CSS-only) */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-spinner {
+  animation: spin 1s linear infinite;
+}
+
+/* Disable animations for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .form-success-message,
+  .error-message,
+  .loading-spinner {
+    animation: none !important;
+    transition: none !important;
+  }
+  
+  .error-message {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
