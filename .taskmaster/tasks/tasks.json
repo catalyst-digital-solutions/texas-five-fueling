@@ -1298,7 +1298,7 @@
         "description": "Install and configure Framer Motion with LazyMotion for optimized bundle size, targeting specific animations for counters, success states, and micro-interactions while maintaining performance targets.",
         "details": "Install framer-motion package and configure LazyMotion wrapper in the root layout to enable tree-shaking and reduce bundle size by ~70%.\n\n1. **Package Installation:**\n```bash\nnpm install framer-motion\n```\n\n2. **Root Layout Configuration (app/layout.tsx):**\n```typescript\nimport { LazyMotion, domAnimation } from 'framer-motion';\n\n// Inside the RootLayout component, wrap children with LazyMotion\n<LazyMotion features={domAnimation} strict>\n  <body className={inter.className}>\n    <Header />\n    {children}\n    <Footer />\n  </body>\n</LazyMotion>\n```\n\n3. **Create Motion Components Wrapper (lib/motion.ts):**\n```typescript\n// Lazy-loaded motion components for smaller bundle\nexport { m } from 'framer-motion';\n```\n\n4. **Accessibility Helper (lib/motion-config.ts):**\n```typescript\nexport const motionConfig = {\n  reducedMotion: 'user',\n  transition: { duration: 0.3, ease: 'easeOut' }\n};\n\nexport const shouldReduceMotion = () => {\n  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;\n};\n```\n\n5. **Usage Guidelines:**\n- Import `m` instead of `motion` for components: `import { m } from '@/lib/motion'`\n- Use `m.div`, `m.span` etc. instead of `motion.div`\n- Only load features for: animated number counters in hero/stats sections, success checkmarks in form submissions, optional gesture support for mobile interactions\n- Avoid using for: simple hover effects (use CSS), basic transitions (use CSS), parallax effects\n\n6. **Bundle Size Monitoring:**\n- Target: ≤10 KB for motion features\n- Use webpack-bundle-analyzer to verify size impact\n- Ensure tree-shaking removes unused features\n\n7. **Performance Constraints:**\n- Lighthouse score must remain ≥90\n- Use Chrome DevTools to profile animation performance\n- Implement fallbacks for reduced motion preferences",
         "testStrategy": "1. Verify framer-motion is installed by checking package.json dependencies. 2. Confirm LazyMotion wrapper is correctly implemented in app/layout.tsx with domAnimation features only. 3. Test bundle size using webpack-bundle-analyzer to ensure motion features are ≤10 KB. 4. Create a test component using m.div with a simple animation and verify it renders correctly. 5. Check that animations respect prefers-reduced-motion by testing with both enabled and disabled states. 6. Run Lighthouse audit to confirm performance score remains ≥90. 7. Verify tree-shaking by checking that unused framer-motion features are not included in the production bundle. 8. Test that the motion components work correctly in existing sections like hero and services without breaking functionality.",
-        "status": "pending",
+        "status": "done",
         "dependencies": [
           1,
           7
@@ -1311,7 +1311,7 @@
             "description": "Install the framer-motion package and set up the LazyMotion wrapper with domAnimation features in the root layout to enable tree-shaking and optimize bundle size.",
             "dependencies": [],
             "details": "Execute npm install framer-motion to add the package. Then modify app/layout.tsx to import LazyMotion and domAnimation from framer-motion. Wrap the body content with <LazyMotion features={domAnimation} strict> to enable lazy loading of animation features. This configuration should reduce the motion library bundle size by approximately 70% through tree-shaking of unused features.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify framer-motion appears in package.json dependencies. Check that app/layout.tsx correctly imports and implements the LazyMotion wrapper. Test that the application starts without errors and the LazyMotion context is available to child components."
           },
           {
@@ -1322,7 +1322,7 @@
               1
             ],
             "details": "Create lib/motion.ts file that exports the lazy-loaded m component from framer-motion for smaller bundle size. Implement lib/motion-config.ts with motionConfig object containing default animation settings (duration: 0.3s, ease: 'easeOut') and a shouldReduceMotion helper function that checks window.matchMedia for prefers-reduced-motion. These utilities will ensure consistent animation behavior and proper accessibility support.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify lib/motion.ts correctly exports the m component. Test shouldReduceMotion function returns true when prefers-reduced-motion is set. Confirm motion components can be imported and used with m.div syntax."
           },
           {
@@ -1334,7 +1334,7 @@
               2
             ],
             "details": "Install webpack-bundle-analyzer as a dev dependency and configure it to analyze the production build. Create a test component using m.div with basic animations (counter, success checkmark) to verify tree-shaking is working. Run production build and analyze bundle to ensure motion features are under 10KB. Use Chrome DevTools Performance tab to profile animations and verify no frame drops. Run Lighthouse audit to confirm performance score remains ≥90 with animations enabled.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run webpack-bundle-analyzer on production build and verify framer-motion contribution is ≤10KB. Execute Lighthouse audit and confirm performance score ≥90. Test animations with Chrome DevTools Performance profiler to ensure 60fps consistency."
           },
           {
@@ -1345,7 +1345,7 @@
               1
             ],
             "details": "Execute npm install framer-motion command to add the package to the project. Verify installation by checking package.json for the framer-motion dependency. Create a lib/motion.ts file to export the lazy-loaded motion components using export { m } from 'framer-motion'. This setup enables tree-shaking and reduces bundle size significantly.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run npm list framer-motion to verify successful installation. Import { m } from the created lib/motion.ts file in a test component to ensure exports work correctly. Check that no TypeScript errors occur during import."
           },
           {
@@ -1356,7 +1356,7 @@
               4
             ],
             "details": "Import LazyMotion and domAnimation from framer-motion in app/layout.tsx. Wrap the body content with LazyMotion component using features={domAnimation} and strict mode enabled. Ensure proper placement of the wrapper to encompass all child components that will use motion features. This configuration reduces bundle size by approximately 70% compared to importing all motion features.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify LazyMotion wrapper renders without errors in development mode. Check browser console for any warnings related to motion features. Create a simple animated component using m.div to test that animations work within the LazyMotion context."
           },
           {
@@ -1367,7 +1367,7 @@
               5
             ],
             "details": "Create lib/motion-config.ts with motionConfig object containing default transition settings (duration: 0.3, ease: 'easeOut'). Implement shouldReduceMotion function to check window.matchMedia for prefers-reduced-motion. Document usage guidelines for developers including when to use m components vs CSS animations. Set up performance monitoring helpers to track animation impact on Core Web Vitals.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test shouldReduceMotion function returns correct boolean based on browser/OS reduced motion settings. Verify motionConfig values are applied to test animations. Use Chrome DevTools Performance tab to ensure animations maintain 60fps."
           }
         ]
@@ -1702,7 +1702,7 @@
     ],
     "metadata": {
       "created": "2025-10-27T19:54:13.545Z",
-      "updated": "2025-10-28T20:38:00.629Z",
+      "updated": "2025-10-28T20:41:01.077Z",
       "description": "Tasks for master context"
     }
   }

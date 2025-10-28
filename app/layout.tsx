@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from 'next/font/google';
+import { LazyMotion, domAnimation } from 'framer-motion';
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -43,13 +44,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={inter.className}>
-        <Header />
-        <main>
-          {children}
-        </main>
-        <Footer />
-      </body>
+      <LazyMotion features={domAnimation} strict>
+        <body className={inter.className}>
+          <Header />
+          <main>
+            {children}
+          </main>
+          <Footer />
+        </body>
+      </LazyMotion>
     </html>
   );
 }
