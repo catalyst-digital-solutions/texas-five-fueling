@@ -88,7 +88,7 @@
         "dependencies": [
           2
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -96,7 +96,7 @@
             "description": "Set up a new Supabase project via the Supabase dashboard, configure the project settings, and retrieve the necessary API keys and project URL for integration.",
             "dependencies": [],
             "details": "Navigate to the Supabase dashboard, create a new project, and note the project URL and anon/public API key from the project settings. Store these securely for environment variable setup in the application.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify project creation in the Supabase dashboard. Confirm that the project URL and API keys are accessible and correct by attempting a test connection from a local environment."
           },
           {
@@ -107,7 +107,7 @@
               1
             ],
             "details": "Use the Supabase SQL Editor to execute the provided SQL statements for creating the lead_submissions, customers, orders, and equipment_tracked tables. Ensure all tables, columns, constraints, and relationships are correctly implemented as specified in the schema.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Inspect each table in the Supabase Table Editor to confirm schema accuracy. Insert and query sample data to validate table structure and relationships. Check that default values and constraints (e.g., NOT NULL, UNIQUE) are enforced."
           },
           {
@@ -118,7 +118,7 @@
               2
             ],
             "details": "Access the Supabase Authentication > Policies section for the lead_submissions table. Define RLS policies to control read/write access, ensuring only authorized roles can interact with the data. Document the policy logic for future reference.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test RLS by attempting to access the lead_submissions table with different user roles (authenticated, anonymous, admin). Verify that access restrictions are enforced as intended and that no unauthorized data exposure occurs."
           }
         ]
@@ -133,7 +133,7 @@
         "dependencies": [
           3
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -141,7 +141,7 @@
             "description": "Install the @supabase/supabase-js package and configure environment variables for Supabase credentials.",
             "dependencies": [],
             "details": "Run `npm install @supabase/supabase-js` in the project root. Create or update the `.env.local` file with `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, and `SUPABASE_SERVICE_ROLE_KEY` using values from the Supabase dashboard.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify that the package is listed in package.json and that environment variables are accessible in the application."
           },
           {
@@ -152,7 +152,7 @@
               1
             ],
             "details": "Create `lib/supabase.ts`. Import `createClient` from `@supabase/supabase-js`. Use environment variables to initialize and export `supabaseClient` (public) and `supabaseAdmin` (admin) as shown in the provided code snippet.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Import the utility in a test script or component and ensure both clients are instantiated without errors."
           },
           {
@@ -163,7 +163,7 @@
               2
             ],
             "details": "Write a simple test function or script that uses `supabaseClient` to query a public table and `supabaseAdmin` to perform an admin-level operation. Check for successful responses and appropriate access control.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run the test function and verify that queries return expected results for both clients, confirming correct setup and permissions."
           }
         ]
@@ -1632,12 +1632,77 @@
           2
         ],
         "priority": "high",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Install AWS SDK and configure NPM dependencies",
+            "description": "Install the AWS SDK for JavaScript v3 client libraries for SES and credential providers, then verify package.json has been updated correctly with the new dependencies",
+            "dependencies": [],
+            "details": "Run npm install @aws-sdk/client-ses @aws-sdk/credential-providers to add AWS SDK v3 packages. Verify installation by checking node_modules and package.json. Ensure no version conflicts with existing dependencies. Document the installed versions in package-lock.json for reproducibility.",
+            "status": "pending",
+            "testStrategy": "Run npm list @aws-sdk/client-ses @aws-sdk/credential-providers to verify packages are installed. Create a simple import test file to ensure modules can be imported without errors."
+          },
+          {
+            "id": 2,
+            "title": "Set up IAM user and configure AWS credentials in environment variables",
+            "description": "Create an IAM user in AWS Console with SES permissions, generate access keys, and configure all required AWS environment variables in the .env.local file for secure authentication",
+            "dependencies": [
+              1
+            ],
+            "details": "Access AWS IAM console to create a new user with programmatic access. Attach AmazonSESFullAccess policy or create a custom policy with minimum required SES permissions. Generate access key ID and secret access key. Add AWS_REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SES_FROM_EMAIL, and AWS_SES_NOTIFICATION_EMAIL to .env.local file. Update .env.example with placeholder values for documentation.",
+            "status": "pending",
+            "testStrategy": "Create a test script that attempts to initialize SESClient with the configured credentials. Use GetAccountSendingEnabledCommand to verify credentials are valid and have proper permissions."
+          },
+          {
+            "id": 3,
+            "title": "Verify domain and email addresses in AWS SES console",
+            "description": "Complete domain verification for texasfivefueling.com and verify sender email addresses in AWS SES to enable email sending capabilities in the production environment",
+            "dependencies": [
+              2
+            ],
+            "details": "Access AWS SES console and initiate domain verification for texasfivefueling.com. Add the required TXT records to the domain's DNS settings. Verify the from email address (noreply@texasfivefueling.com) and notification recipient email. Wait for verification status to complete. Move out of SES sandbox mode if needed by requesting production access. Document DNS records and verification tokens for future reference.",
+            "status": "pending",
+            "testStrategy": "Use GetIdentityVerificationAttributesCommand to programmatically check verification status. Send a test email from verified address to verified recipient to confirm SES configuration is working."
+          },
+          {
+            "id": 4,
+            "title": "Implement core email sending module with HTML and text templates",
+            "description": "Create the main SES email service module with functions for sending notification emails, including both HTML and plain text email templates for lead submissions",
+            "dependencies": [
+              3
+            ],
+            "details": "Create lib/aws-ses.ts file with SESClient configuration using environment variables. Implement sendNotificationEmail function with SendEmailCommand. Create generateEmailTemplate function for HTML email with responsive design and inline CSS. Create generatePlainTextEmail function for text fallback. Include proper TypeScript types for lead data. Add reply-to header with lead's email address. Implement proper charset handling for UTF-8 content.",
+            "status": "pending",
+            "testStrategy": "Create unit tests for template generation functions with sample lead data. Integration test sendNotificationEmail with mock SES client. Test with various lead data scenarios including missing optional fields."
+          },
+          {
+            "id": 5,
+            "title": "Add retry logic and comprehensive error handling",
+            "description": "Implement exponential backoff retry mechanism and error handling for various SES failure scenarios including throttling, configuration errors, and network issues",
+            "dependencies": [
+              4
+            ],
+            "details": "Create lib/aws-ses-retry.ts with sendEmailWithRetry function implementing exponential backoff strategy. Handle specific SES error types like Throttling, MessageRejected, and ConfigurationSetDoesNotExist. Implement maximum retry attempts with configurable delay. Add detailed error logging for debugging. Create custom error types for different failure scenarios. Ensure non-retryable errors fail fast. Add metrics tracking for retry attempts and success rates.",
+            "status": "pending",
+            "testStrategy": "Unit test retry logic with mocked failures to verify exponential backoff timing. Test different error scenarios to ensure appropriate retry behavior. Verify that non-retryable errors fail immediately without retries."
+          },
+          {
+            "id": 6,
+            "title": "Create health check endpoint and testing utilities",
+            "description": "Develop an API endpoint for monitoring SES service health, quota usage, and create utilities for testing email functionality during development and deployment",
+            "dependencies": [
+              5
+            ],
+            "details": "Create app/api/health/ses/route.ts implementing GET endpoint that checks SES quota and sending statistics. Use GetSendQuotaCommand to retrieve current usage metrics. Return structured JSON response with health status and quota information. Implement proper error handling returning 503 status for unhealthy state. Create development utilities for testing email sending without affecting production quota. Add logging for monitoring email send success rates and failures.",
+            "status": "pending",
+            "testStrategy": "Test health endpoint returns correct status codes for healthy and unhealthy states. Verify quota information is accurately retrieved and formatted. Test endpoint handles SES service outages gracefully with appropriate error responses."
+          }
+        ]
       }
     ],
     "metadata": {
       "created": "2025-10-27T19:54:13.545Z",
-      "updated": "2025-10-28T18:53:00.372Z",
+      "updated": "2025-10-28T19:54:16.686Z",
       "description": "Tasks for master context"
     }
   }
