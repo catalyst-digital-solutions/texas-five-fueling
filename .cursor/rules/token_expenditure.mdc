@@ -1,0 +1,32 @@
+---
+description: Token expenditure limits for long-running operations to prevent excessive usage
+globs: **/*
+alwaysApply: true
+---
+
+## Token Expenditure Management
+
+### Rules
+- Ask for permission before running any operation that might exceed 128k tokens
+- Monitor token usage during long-running operations
+- Break large operations into smaller batches when possible
+- Warn user if operation might exceed limit before starting
+
+### When to Ask Permission
+- Operations that might process more than ~128k tokens
+- Batch operations on multiple large files
+- Codebase-wide searches with extensive results
+- AI-powered analysis operations
+- Task Master AI operations that might take significant tokens
+
+### Best Practices
+- Always inform the user if an operation is estimated to exceed limits
+- Suggest breaking operations into smaller chunks when appropriate
+- Provide alternatives if token limits are a concern
+- Be transparent about token usage when completing operations
+
+### Implementation
+- Check estimated token usage before starting long operations
+- Provide clear warnings if approaching limits
+- Offer to split work into multiple smaller operations
+- Prioritize user control over automated execution for large operations

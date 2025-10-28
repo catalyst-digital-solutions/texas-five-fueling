@@ -1,0 +1,504 @@
+# Texas Five Fueling - Phase 1 Landing Page
+## Product Requirements Document
+
+<context>
+# Overview
+Texas Five Fueling (T5 Fueling) is a commercial diesel delivery service operating in Houston, TX, under the parent company NextGen Group. This project builds a professional single-page landing site with lead capture functionality while establishing future-ready backend architecture for Phase 2 operations platform.
+
+**Critical Business Constraint:** Infrastructure costs must remain under $25/month for Phase 1. The client pays $97/month for hosting - we need healthy margin.
+
+**Two-Phase Strategy:**
+- **Phase 1 (THIS BUILD):** Live, functional landing page with lead capture. Backend architecture created but NOT activated.
+- **Phase 2 (FUTURE - 6-12 months):** Activate customer portals, dispatch management, and AI automation (separate project).
+
+# Core Features
+
+## Active Features (Phase 1 - Must Be Built and Deployed)
+
+### 1. Professional Landing Page
+Single-page marketing site showcasing T5 Fueling's commercial diesel delivery services with mobile-first responsive design.
+
+### 2. Hero Section
+- Headline: "Houston's Most Reliable Commercial Fuel Delivery Service"
+- Subheadline: "24/7 diesel delivery for generators, equipment, and job sites. Serving Houston and surrounding areas with fast, dependable service."
+- Background image (stock photo with logo composite)
+- Two CTAs: "Get a Quote" (scroll to form) and "Call Now" (tel: link to (281) 750-2023)
+
+### 3. Services Display
+Display all 5 core services with icons and brief descriptions:
+- **Diesel Generator Refueling:** Keep generators running with scheduled and emergency fuel delivery
+- **Equipment Refueling:** On-site diesel delivery for construction equipment and heavy-duty vehicles
+- **Job Site Fuel Delivery:** Bulk diesel delivery directly to job sites with flexible scheduling
+- **Shop Fueling Services:** Regular fuel delivery for shop fleets with 24/7 emergency service
+- **DEF Re-filling:** Diesel Exhaust Fluid delivery for generators and equipment compliance
+
+### 4. Service Area Section
+- Google Maps embed showing Houston coverage area
+- List of cities/regions served (Houston, Hempstead, and surrounding areas)
+- Clean, scannable layout
+
+### 5. Equipment Types Display
+Visual grid showing equipment types serviced with stock images.
+
+### 6. Trust/Social Proof Section
+- "Part of NextGen Group" badge
+- Service guarantees (24/7, licensed, insured)
+- Service area highlights
+
+### 7. Lead Capture Form
+**Form Fields:**
+- Name (required)
+- Company Name (optional)
+- Email (required)
+- Phone (required)
+- Service Type (dropdown - 5 service types)
+- Location/Service Address (required)
+- Message/Additional Details (textarea, optional)
+
+**Form Processing Flow:**
+1. Client-side validation
+2. POST to `/api/leads` Next.js API route
+3. Store in Supabase `lead_submissions` table
+4. Send email to info@t5fueling.com via Resend
+5. Show success message to user
+
+### 8. Footer
+- Contact info: (281) 750-2023, info@t5fueling.com, Hempstead, TX
+- Quick links
+- Copyright notice
+
+### 9. Mobile Optimization
+- Responsive design (mobile-first)
+- Tap-to-call buttons on mobile
+- Fast loading (<2 seconds)
+- PWA manifest for offline capability
+
+### 10. SEO & Technical Optimization
+- **Title:** "Texas Five Fueling | Commercial Diesel Delivery Houston TX"
+- **Meta Description:** "24/7 commercial diesel delivery for generators, equipment & job sites in Houston and surrounding areas. Licensed, insured, and reliable fuel delivery services."
+- **LocalBusiness schema markup** with NAP consistency
+- **Service area schema**
+- Sitemap, robots.txt, Open Graph tags
+
+## Structure-Only Features (Phase 1 - Create But Don't Activate)
+
+### 11. Database Schema
+Create ALL tables but only `lead_submissions` is actively used:
+
+**ACTIVE TABLE:**
+```sql
+CREATE TABLE lead_submissions (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  created_at timestamp DEFAULT now(),
+  name text NOT NULL,
+  company_name text,
+  email text NOT NULL,
+  phone text NOT NULL,
+  service_type text NOT NULL,
+  location text NOT NULL,
+  message text,
+  status text DEFAULT 'new',
+  converted_to_customer_id uuid
+);
+```
+
+**STRUCTURE ONLY (Empty Tables for Phase 2):**
+```sql
+CREATE TABLE customers (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  created_at timestamp DEFAULT now(),
+  company_name text,
+  contact_name text,
+  email text UNIQUE,
+  phone text,
+  billing_address jsonb,
+  service_address jsonb,
+  customer_type text,
+  status text DEFAULT 'inactive',
+  notes text
+);
+
+CREATE TABLE orders (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  created_at timestamp DEFAULT now(),
+  customer_id uuid REFERENCES customers(id),
+  service_type text,
+  service_address jsonb,
+  scheduled_date timestamp,
+  completed_date timestamp,
+  fuel_amount_gallons numeric,
+  def_amount_gallons numeric,
+  status text DEFAULT 'pending',
+  price numeric,
+  notes text
+);
+
+CREATE TABLE equipment_tracked (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  customer_id uuid REFERENCES customers(id),
+  equipment_type text,
+  equipment_make_model text,
+  fuel_tank_capacity_gallons numeric,
+  location geography(point),
+  last_service_date timestamp,
+  status text DEFAULT 'inactive'
+);
+```
+
+### 12. API Route Stubs
+Create stub routes that return 501 "Not Implemented":
+- `/app/api/customers/route.ts`
+- `/app/api/orders/route.ts`
+
+### 13. Authentication Structure
+- Supabase Auth configured in environment variables
+- `middleware.ts` with auth logic (commented out)
+- NO login UI, NO protected routes active
+- Document activation instructions for Phase 2
+
+### 14. Admin Panel Structure
+- `/app/admin/page.tsx` displays "Operations Platform Coming Soon" message
+- No actual admin functionality
+
+# User Experience
+
+## User Personas
+**Primary:** Commercial contractors, construction companies, facilities managers needing diesel delivery
+**Secondary:** Agricultural operations, industrial facilities with backup generators
+
+## Key User Flows
+
+### Flow 1: Quick Quote Request
+1. User lands on hero section
+2. Clicks "Get a Quote" button
+3. Page smoothly scrolls to contact form
+4. User fills required fields
+5. Submits form
+6. Sees success message
+7. Receives confirmation email (future enhancement)
+
+### Flow 2: Immediate Call
+1. User lands on hero section (or anywhere on page)
+2. Clicks "Call Now" button
+3. On mobile: initiates phone call to (281) 750-2023
+4. On desktop: displays phone number prominently
+
+### Flow 3: Service Exploration
+1. User scrolls through landing page
+2. Views services section to understand offerings
+3. Checks service area map to confirm coverage
+4. Reviews equipment types serviced
+5. Sees trust indicators (NextGen Group, guarantees)
+6. Decides to request quote or call
+
+## UI/UX Considerations
+- **Mobile-First:** Most commercial contractors browse on phones at job sites
+- **Speed:** <2 second load time - contractors won't wait
+- **Clear CTAs:** Multiple "Get a Quote" and "Call Now" buttons throughout page
+- **Trust Building:** Professional appearance, clear credentials, association with NextGen Group
+- **Minimal Friction:** Short form, only essential fields required
+- **Accessibility:** High contrast, readable fonts, tap targets >44px on mobile
+
+</context>
+
+<PRD>
+# Technical Architecture
+
+## Frontend Stack
+- **Framework:** Next.js 13+ with App Router
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS (vanilla, no shadcn/ui - keep it simple)
+- **Deployment:** Vercel (FREE tier first, Pro at $20/mo if needed)
+- **PWA:** Service workers for offline capability
+
+## Backend Stack
+- **Database:** Supabase PostgreSQL (FREE tier - stay under 500MB)
+- **Authentication:** Supabase Auth (configured but NOT active)
+- **API Layer:** Next.js API routes (no separate backend)
+- **Email Service:** Resend (FREE tier - 100 emails/day)
+- **CMS:** None - content hardcoded in components
+
+## Third-Party Services
+- **Google Maps:** Maps Embed API (FREE - $200/month credit covers single embed)
+- **Resend:** Email delivery (FREE - 100 emails/day)
+- **Supabase:** Database + Auth (FREE - 500MB limit)
+
+## Cost Optimization Decisions
+❌ **NO Payload CMS** - Unnecessary complexity for single landing page
+❌ **NO AWS Lambda** - Use Next.js API routes instead
+❌ **NO separate backend services** - Everything in Next.js
+✅ **Supabase FREE tier** - Only storing form submissions
+✅ **Vercel FREE or Pro** - $0-20/mo sufficient for landing page traffic
+✅ **Resend FREE tier** - 100 emails/day covers form submissions
+✅ **Google Maps FREE tier** - Single map embed well within limits
+
+**Target Monthly Cost: $0-20 (well under $25 constraint)**
+
+## Component Architecture
+```
+/components/
+  /ui/
+    Button.tsx           # Reusable button component
+    Input.tsx            # Form input component
+    Textarea.tsx         # Form textarea component
+    Select.tsx           # Form select dropdown
+  
+  /sections/
+    Hero.tsx             # Hero section with CTAs
+    Services.tsx         # 5 services display
+    ServiceArea.tsx      # Google Maps + service area
+    Equipment.tsx        # Equipment types grid
+    ContactForm.tsx      # Lead capture form
+    TrustSection.tsx     # Social proof section
+    Footer.tsx           # Footer with contact info
+  
+  /layout/
+    Header.tsx           # Site header with navigation
+```
+
+## API Routes Structure
+```
+/app/api/
+  /leads/
+    route.ts            ✅ FULLY IMPLEMENTED (form submission)
+  
+  /customers/
+    route.ts            ⚠️ STUB ONLY - Returns 501 "Not Implemented"
+  
+  /orders/
+    route.ts            ⚠️ STUB ONLY - Returns 501 "Not Implemented"
+```
+
+## Data Models
+
+### Active: lead_submissions
+Stores form submissions from contact form.
+Fields: id, created_at, name, company_name, email, phone, service_type, location, message, status, converted_to_customer_id
+
+### Structure Only: customers
+Empty table for Phase 2 customer management.
+Fields: id, created_at, company_name, contact_name, email, phone, billing_address, service_address, customer_type, status, notes
+
+### Structure Only: orders
+Empty table for Phase 2 order tracking.
+Fields: id, created_at, customer_id, service_type, service_address, scheduled_date, completed_date, fuel_amount_gallons, def_amount_gallons, status, price, notes
+
+### Structure Only: equipment_tracked
+Empty table for Phase 2 equipment tracking.
+Fields: id, created_at, customer_id, equipment_type, equipment_make_model, fuel_tank_capacity_gallons, location, last_service_date, status
+
+## Environment Variables
+```
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+RESEND_API_KEY=
+CONTACT_EMAIL=info@t5fueling.com
+NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=
+```
+
+## Security Considerations
+- API keys restricted to TexasFiveFueling.com domain
+- Supabase RLS policies on lead_submissions table
+- Rate limiting on contact form (prevent spam)
+- Input validation and sanitization
+- HTTPS enforced (automatic via Vercel)
+
+# Development Roadmap
+
+## Phase 1: Landing Page + Lead Capture (THIS BUILD)
+
+### MVP Requirements - What Must Be Live
+1. Professional single-page landing site
+2. All 6 sections (Hero, Services, Service Area, Equipment, Trust, Footer)
+3. Functional contact form with database storage and email delivery
+4. Mobile-responsive design
+5. SEO optimized (meta tags, structured data, sitemap)
+6. PWA capable (manifest, service worker)
+7. Fast performance (Lighthouse >90)
+8. Custom domain configured (TexasFiveFueling.com)
+9. Cost verified under $25/month
+
+### Structure Requirements - What Must Exist But Not Be Active
+1. All database tables created (lead_submissions + 3 Phase 2 tables)
+2. API route stubs for customers and orders
+3. Authentication configuration (disabled)
+4. Admin panel folder structure
+5. Documentation for Phase 2 activation
+
+### Documentation Requirements
+1. README.md - Phase 1 vs Phase 2 explanation
+2. PHASE2_ACTIVATION.md - Roadmap for future activation
+3. COST_MONITORING.md - Infrastructure cost tracking
+4. DEPLOYMENT.md - Deployment and setup instructions
+
+## Phase 2: Operations Platform (FUTURE - NOT THIS BUILD)
+When client is ready (6-12 months from now):
+- Customer login/authentication
+- Customer portal for order management
+- Dispatch dashboard for T5 Fueling operations
+- Order tracking and management
+- Payment processing integration
+- AI-powered automation features
+- Real-time updates
+- Mobile apps
+
+**Phase 2 Hosting Tier:** $297/month (vs $97/month Phase 1)
+
+# Logical Dependency Chain
+
+## Foundation Layer (Build First)
+1. **Project Setup:** Next.js initialization, TypeScript, Tailwind
+2. **Database Schema:** Supabase project + all table migrations
+3. **Environment Configuration:** All API keys and services configured
+
+## UI Foundation (Build Second)
+4. **Core UI Components:** Button, Input, Textarea, Select (reusable)
+5. **Layout Components:** Header, Footer (used across all sections)
+
+## Visible Features (Build Third - Get Something Working Fast)
+6. **Hero Section:** First visible element, establishes brand
+7. **Services Section:** Core value proposition display
+8. **Service Area Section:** Google Maps integration, coverage area
+9. **Equipment Section:** Visual proof of capabilities
+10. **Trust Section:** Social proof and credibility
+
+## Functional Features (Build Fourth - Add Interactivity)
+11. **Contact Form UI:** Form validation, UX, loading states
+12. **Contact Form Backend:** `/api/leads` endpoint implementation
+13. **Email Integration:** Resend setup for lead notifications
+14. **Form End-to-End:** Complete submission flow working
+
+## Structure Features (Build Fifth - Future-Ready Architecture)
+15. **API Stubs:** Customers and orders endpoints (501 responses)
+16. **Auth Structure:** Middleware and config (commented out)
+17. **Admin Structure:** Admin folder with placeholder
+
+## Polish Layer (Build Last)
+18. **SEO Implementation:** Meta tags, structured data, sitemap, robots.txt
+19. **PWA Features:** Manifest, service worker, offline capability
+20. **Performance Optimization:** Image optimization, lazy loading
+21. **Content & Assets:** All images, icons, copy in place
+
+## Deployment & Verification (Final Steps)
+22. **Vercel Deployment:** Configure environment, custom domain
+23. **Testing:** Functional, performance, cross-browser testing
+24. **Documentation:** All docs created and verified
+25. **Cost Verification:** Confirm under $25/month, document usage
+
+# Risks and Mitigations
+
+## Technical Challenges
+
+### Risk: Supabase Free Tier Limits
+**Mitigation:** 
+- Monitor database size (<500MB)
+- Implement data retention policy for old leads
+- Document upgrade triggers (approaching 400MB)
+
+### Risk: Form Spam Submissions
+**Mitigation:**
+- Implement rate limiting on `/api/leads`
+- Add honeypot field (hidden from real users)
+- Consider adding simple CAPTCHA if spam occurs
+
+### Risk: Email Delivery Failures
+**Mitigation:**
+- Implement retry logic in `/api/leads`
+- Log all form submissions to database (regardless of email success)
+- Monitor Resend dashboard for delivery issues
+
+### Risk: Google Maps API Cost Overrun
+**Mitigation:**
+- Use Maps Embed API (not JavaScript API - cheaper)
+- Restrict API key to TexasFiveFueling.com domain
+- Set usage limits in Google Cloud Console
+
+## MVP Scope Management
+
+### Risk: Feature Creep
+**Mitigation:**
+- Clear Phase 1 vs Phase 2 delineation in documentation
+- Create stub/structure for future features (shows it's "ready")
+- Client sees architecture but doesn't pay Phase 2 hosting until features activate
+
+### Risk: Over-Engineering
+**Mitigation:**
+- NO CMS (hardcode content - it's a single page)
+- NO shadcn/ui (vanilla Tailwind is sufficient)
+- NO complex state management (simple React state)
+- Fewer abstractions = easier maintenance
+
+## Resource Constraints
+
+### Risk: Cost Exceeds $25/month
+**Mitigation:**
+- Start with Vercel FREE tier (upgrade to Pro only if needed)
+- Use free tiers for all services
+- Document cost monitoring and upgrade triggers
+- Regular cost audits
+
+### Risk: Development Time Overrun
+**Mitigation:**
+- Clear task breakdown with dependencies
+- Prioritize visible landing page features first
+- Structure-only features are quick to implement
+- Testing and documentation built into timeline
+
+# Appendix
+
+## Contact Information
+- **Business Name:** Texas Five Fueling (T5 Fueling)
+- **Parent Company:** NextGen Group
+- **Domain:** TexasFiveFueling.com
+- **Email Domain:** T5Fueling.com
+- **Primary Contact:** info@t5fueling.com
+- **Phone:** (281) 750-2023
+- **Service Area:** Houston and surrounding areas (base: Hempstead, TX)
+
+## Service Details
+1. **Diesel Generator Refueling:** Standby and portable generators for commercial/industrial
+2. **Equipment Refueling:** Construction equipment, agricultural machinery, heavy-duty vehicles
+3. **Job Site Fuel Delivery:** Bulk diesel to construction sites, flexible scheduling
+4. **Shop Fueling Services:** Fleet and equipment yard deliveries, automated scheduling
+5. **DEF Re-filling:** Diesel Exhaust Fluid for generator and equipment compliance
+
+## Technical Specifications
+- **Target Load Time:** <2 seconds
+- **Lighthouse Scores:** >90 (Performance, Accessibility, Best Practices, SEO)
+- **Mobile Responsiveness:** 320px to 2560px viewports
+- **Browser Support:** Chrome, Safari, Firefox, Edge (last 2 versions)
+- **PWA Installable:** Yes (manifest + service worker)
+
+## Success Criteria Checklist
+
+### Technical ✅
+- [ ] Site loads in <2 seconds
+- [ ] Lighthouse scores >90 across all categories
+- [ ] Mobile-friendly and responsive
+- [ ] Contact form works reliably (form → DB → email)
+- [ ] All database tables created (active + structure-only)
+- [ ] Total infrastructure cost: $0-25/month
+
+### Business ✅
+- [ ] Professional appearance
+- [ ] Clear CTAs throughout page
+- [ ] Lead capture functional and reliable
+- [ ] Tap-to-call works on mobile
+- [ ] Client can see "future-ready architecture" in codebase
+
+### Documentation ✅
+- [ ] README explains Phase 1 vs Phase 2
+- [ ] Phase 2 activation guide exists
+- [ ] Cost monitoring documentation complete
+- [ ] Client has all credentials and access
+
+## Research Findings
+- **Industry Standards:** Commercial fuel delivery sites emphasize reliability, 24/7 service, and local presence
+- **Competitor Analysis:** Competitors have complex sites - we'll differentiate with speed and simplicity
+- **Mobile Usage:** 70%+ of commercial contractors browse on mobile devices
+- **Conversion Optimization:** Clear phone number and simple form increase lead conversion
+- **Local SEO:** LocalBusiness schema and service area targeting critical for Houston market
+
+</PRD>
+

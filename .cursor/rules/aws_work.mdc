@@ -1,0 +1,44 @@
+---
+description: AWS development workflow using Amazon Q Developer for implementation with guidance
+globs: **/*
+alwaysApply: true
+---
+
+## AWS Development Workflow
+
+### When Working with AWS Services
+- For AWS implementations (Lambda, S3, CloudFormation, API Gateway, etc.), use Amazon Q Developer as the primary implementation tool
+- I will provide guidance and code reviews
+- Amazon Q Developer handles the actual coding based on guidance
+
+### Workflow
+1. **Identify AWS Work**: Recognize when a task involves AWS services
+2. **Ask User**: Request to involve Amazon Q Developer for the implementation
+3. **Provide Guidance**: Share architecture, requirements, and best practices
+4. **Review**: Review the code that Amazon Q Developer produces
+
+### Services to Consider
+- AWS Lambda (serverless functions)
+- Amazon S3 (object storage)
+- AWS API Gateway (API management)
+- AWS CloudFormation (infrastructure as code)
+- Amazon DynamoDB (database)
+- AWS Cognito (authentication)
+- AWS SES (email sending)
+- AWS CloudFront (CDN)
+- Other AWS services as needed
+
+### Implementation Approach
+- Provide clear requirements and architecture guidance
+- Let Amazon Q Developer implement the code
+- Review for security, performance, and best practices
+- Ensure proper error handling and logging
+- Verify AWS service integration works correctly
+
+### Best Practices
+- Always follow AWS Well-Architected Framework principles
+- Use Infrastructure as Code (CloudFormation, CDK, Terraform)
+- Implement proper IAM roles and least privilege
+- Include error handling and monitoring
+- Consider cost optimization
+- Ensure security best practices are followed
