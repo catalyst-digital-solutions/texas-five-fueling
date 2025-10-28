@@ -88,7 +88,7 @@ export default function Equipment() {
           {equipmentTypes.map((equipment, index) => (
             <div
               key={index}
-              ref={(el) => (cardsRef.current[index] = el)}
+              ref={(el) => { cardsRef.current[index] = el; }}
               className="equipment-card relative overflow-hidden rounded-xl shadow-md group"
             >
               <div className="aspect-[16/10] relative">

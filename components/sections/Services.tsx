@@ -83,7 +83,7 @@ export default function Services() {
           {services.map((service, index) => (
             <div 
               key={index}
-              ref={(el) => (cardsRef.current[index] = el)}
+              ref={(el) => { cardsRef.current[index] = el; }}
               className="service-card bg-white p-8 rounded-xl shadow-sm transition-all duration-200 ease-out motion-reduce:transition-none"
             >
               <div className="flex items-start mb-4">

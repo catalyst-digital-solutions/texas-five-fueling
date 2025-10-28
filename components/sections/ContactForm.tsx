@@ -208,7 +208,7 @@ export default function ContactForm() {
                   value={formData.name}
                   onChange={(e) => handleChange('name', e.target.value)}
                   onBlur={() => handleBlur('name')}
-                  error={touched.name && errors.name}
+                  error={touched.name && errors.name ? errors.name : undefined}
                   required
                 />
               </div>
@@ -239,7 +239,7 @@ export default function ContactForm() {
                   value={formData.email}
                   onChange={(e) => handleChange('email', e.target.value)}
                   onBlur={() => handleBlur('email')}
-                  error={touched.email && errors.email}
+                  error={touched.email && errors.email ? errors.email : undefined}
                   required
                 />
               </div>
@@ -255,7 +255,7 @@ export default function ContactForm() {
                   value={formData.phone}
                   onChange={(e) => handleChange('phone', e.target.value)}
                   onBlur={() => handleBlur('phone')}
-                  error={touched.phone && errors.phone}
+                  error={touched.phone && errors.phone ? errors.phone : undefined}
                   required
                 />
               </div>
@@ -268,18 +268,15 @@ export default function ContactForm() {
               </label>
               <Select
                 id="serviceType"
+                name="serviceType"
                 value={formData.serviceType}
                 onChange={(e) => handleChange('serviceType', e.target.value)}
                 onBlur={() => handleBlur('serviceType')}
-                error={touched.serviceType && errors.serviceType}
+                error={touched.serviceType && errors.serviceType ? errors.serviceType : undefined}
                 required
-              >
-                {serviceTypes.map((type) => (
-                  <option key={type.value} value={type.value}>
-                    {type.label}
-                  </option>
-                ))}
-              </Select>
+                options={serviceTypes.map(type => ({ value: type.value, label: type.label }))}
+                placeholder="Select a service..."
+              />
             </div>
             
             {/* Location */}
@@ -293,7 +290,7 @@ export default function ContactForm() {
                 value={formData.location}
                 onChange={(e) => handleChange('location', e.target.value)}
                 onBlur={() => handleBlur('location')}
-                error={touched.location && errors.location}
+                error={touched.location && errors.location ? errors.location : undefined}
                 placeholder="City, State or specific address"
                 required
               />
