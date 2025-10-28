@@ -1,0 +1,50 @@
+/**
+ * Motion Accessibility Styles
+ * Comprehensive support for prefers-reduced-motion and custom toggle
+ */
+
+/* System-based motion reduction */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom user-controlled motion reduction */
+[data-reduce-motion="true"] *,
+[data-reduce-motion="true"] *::before,
+[data-reduce-motion="true"] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Ensure immediate visibility when motion is reduced */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in,
+  .fade-in-up,
+  .fade-in-down,
+  .service-card,
+  .equipment-card {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+}
+
+[data-reduce-motion="true"] .fade-in,
+[data-reduce-motion="true"] .fade-in-up,
+[data-reduce-motion="true"] .fade-in-down,
+[data-reduce-motion="true"] .service-card,
+[data-reduce-motion="true"] .equipment-card {
+  opacity: 1 !important;
+  transform: none !important;
+  animation: none !important;
+}
+

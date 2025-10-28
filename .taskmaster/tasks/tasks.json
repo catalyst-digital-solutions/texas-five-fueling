@@ -1451,7 +1451,7 @@
         "description": "Implement comprehensive motion accessibility features including system-wide prefers-reduced-motion support and a custom site toggle for reduced motion preferences to achieve WCAG 2.1 AA compliance.",
         "details": "Implement motion accessibility with dual-control system (CSS media query + JavaScript toggle):\n\n**1. Global CSS Implementation:**\n```css\n/* styles/motion.css */\n@media (prefers-reduced-motion: reduce) {\n  *, *::before, *::after {\n    animation-duration: 0.01ms !important;\n    animation-iteration-count: 1 !important;\n    transition-duration: 0.01ms !important;\n    scroll-behavior: auto !important;\n  }\n}\n\n[data-reduce-motion=\"true\"] *,\n[data-reduce-motion=\"true\"] *::before,\n[data-reduce-motion=\"true\"] *::after {\n  animation-duration: 0.01ms !important;\n  animation-iteration-count: 1 !important;\n  transition-duration: 0.01ms !important;\n  scroll-behavior: auto !important;\n}\n```\n\n**2. Motion Preference Hook:**\n```typescript\n// hooks/useReducedMotion.ts\nimport { useEffect, useState } from 'react';\n\nexport function useReducedMotion() {\n  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);\n  const [userPreference, setUserPreference] = useState<boolean | null>(null);\n\n  useEffect(() => {\n    const stored = localStorage.getItem('reduceMotion');\n    if (stored !== null) {\n      setUserPreference(stored === 'true');\n      document.documentElement.setAttribute('data-reduce-motion', stored);\n    }\n\n    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');\n    setPrefersReducedMotion(mediaQuery.matches);\n\n    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);\n    mediaQuery.addEventListener('change', handler);\n    return () => mediaQuery.removeEventListener('change', handler);\n  }, []);\n\n  const toggleMotion = () => {\n    const newValue = userPreference === null ? !prefersReducedMotion : !userPreference;\n    setUserPreference(newValue);\n    localStorage.setItem('reduceMotion', String(newValue));\n    document.documentElement.setAttribute('data-reduce-motion', String(newValue));\n  };\n\n  return {\n    shouldReduceMotion: userPreference ?? prefersReducedMotion,\n    toggleMotion,\n    isUserControlled: userPreference !== null\n  };\n}\n```\n\n**3. Motion Toggle Component:**\n```typescript\n// components/ui/MotionToggle.tsx\nimport { useReducedMotion } from '@/hooks/useReducedMotion';\n\nexport default function MotionToggle() {\n  const { shouldReduceMotion, toggleMotion, isUserControlled } = useReducedMotion();\n\n  return (\n    <button\n      onClick={toggleMotion}\n      className=\"flex items-center gap-2 text-sm text-gray-600 hover:text-gray-800 transition-colors\"\n      aria-pressed={shouldReduceMotion}\n      aria-label={`${shouldReduceMotion ? 'Enable' : 'Disable'} animations`}\n    >\n      <span className=\"sr-only\">Motion Settings:</span>\n      <svg className=\"w-4 h-4\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\">\n        {shouldReduceMotion ? (\n          <path d=\"M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z\" />\n        ) : (\n          <path d=\"M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z\" />\n        )}\n      </svg>\n      <span>Animations: {shouldReduceMotion ? 'Off' : 'On'}</span>\n      {isUserControlled && (\n        <span className=\"text-xs text-gray-500\">(Custom)</span>\n      )}\n    </button>\n  );\n}\n```\n\n**4. Framer Motion Integration:**\n```typescript\n// utils/motion.ts\nimport { Variants } from 'framer-motion';\n\nexport const createMotionVariants = (shouldReduce: boolean): Variants => {\n  if (shouldReduce) {\n    return {\n      hidden: { opacity: 0 },\n      visible: { opacity: 1 }\n    };\n  }\n  return {\n    hidden: { opacity: 0, y: 20 },\n    visible: {\n      opacity: 1,\n      y: 0,\n      transition: { duration: 0.6, ease: 'easeOut' }\n    }\n  };\n};\n\n// Usage in components:\nconst { shouldReduceMotion } = useReducedMotion();\nconst variants = createMotionVariants(shouldReduceMotion);\n```\n\n**5. Update Footer to Include Toggle:**\n```typescript\n// components/layout/Footer.tsx - Add after social links\n<div className=\"flex items-center justify-between mt-4 pt-4 border-t border-gray-700\">\n  <p className=\"text-sm text-gray-400\">© 2024 Texas Five Fueling</p>\n  <MotionToggle />\n</div>\n```\n\n**6. Number Counter Adaptation:**\nFor animated number counters, provide instant display when motion is reduced:\n```typescript\nif (shouldReduceMotion) {\n  return <span>{finalValue}</span>;\n}\n// Regular animated counter code\n```",
         "testStrategy": "**1. Browser Setting Test:**\n- Enable 'Reduce motion' in OS accessibility settings\n- Verify all animations stop immediately site-wide\n- Check that hover states still work but without transitions\n- Confirm scroll behavior becomes instant\n\n**2. Custom Toggle Test:**\n- Click the motion toggle in footer\n- Verify localStorage contains 'reduceMotion' key\n- Confirm HTML element has data-reduce-motion attribute\n- Test that preference persists across page reloads\n- Verify toggle state updates UI correctly\n\n**3. Animation Verification:**\n- Test each animated component with motion reduced:\n  - Hero section: Elements appear instantly\n  - Service cards: No fade-in on scroll\n  - Equipment grid: No hover scale effects\n  - Contact form: Instant field focus\n  - Number counters: Show final value immediately\n\n**4. Accessibility Audit:**\n- Run axe DevTools with motion reduced\n- Test with NVDA/JAWS screen readers\n- Verify toggle button has proper ARIA attributes\n- Check keyboard navigation still works\n- Confirm focus indicators remain visible\n\n**5. Performance Test:**\n- Use Chrome DevTools Performance tab\n- Verify no animation frames when reduced\n- Check that GPU usage decreases\n- Confirm smooth 60fps with animations disabled\n\n**6. Cross-browser Testing:**\n- Test in Chrome, Firefox, Safari, Edge\n- Verify media query works in all browsers\n- Check localStorage fallback for older browsers",
-        "status": "pending",
+        "status": "done",
         "dependencies": [
           1,
           7
@@ -1464,7 +1464,7 @@
             "description": "Implement comprehensive CSS rules for motion reduction that handle both system preferences and custom user settings via data attributes",
             "dependencies": [],
             "details": "Create a new styles/motion.css file with media queries for prefers-reduced-motion and data attribute selectors for custom toggle. Include rules to disable animations, transitions, and smooth scrolling by setting durations to 0.01ms and scroll-behavior to auto. Import this CSS file in the global styles to ensure site-wide coverage.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test by enabling reduced motion in OS settings and verify all animations stop. Check that data-reduce-motion attribute properly overrides animations. Use browser DevTools to confirm CSS rules are applied correctly."
           },
           {
@@ -1475,7 +1475,7 @@
               1
             ],
             "details": "Develop useReducedMotion hook in hooks/useReducedMotion.ts to detect system preferences, manage localStorage state, and provide toggle functionality. Create MotionToggle component in components/ui/MotionToggle.tsx with accessible button, visual indicators, and proper ARIA attributes. Hook should handle both system preferences and user overrides with localStorage persistence.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify hook correctly detects system preferences and persists user choices in localStorage. Test toggle component updates UI state and applies data-reduce-motion attribute to document. Check ARIA attributes and keyboard accessibility."
           },
           {
@@ -1486,7 +1486,7 @@
               2
             ],
             "details": "Create utils/motion.ts with createMotionVariants function that returns simplified variants when motion is reduced. Update Footer component to include MotionToggle after social links. Ensure all animated components (especially number counters) check shouldReduceMotion and provide instant display alternatives. Document usage patterns for future component development.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test Framer Motion animations respect reduced motion settings. Verify number counters display instantly when motion is reduced. Check Footer displays toggle correctly and maintains responsive layout. Test toggle functionality across different pages."
           },
           {
@@ -1495,7 +1495,7 @@
             "description": "Implement the global CSS file for motion reduction and create the useReducedMotion hook to manage both system preferences and user-controlled settings",
             "dependencies": [],
             "details": "Create styles/motion.css with @media queries for prefers-reduced-motion and data-reduce-motion attribute selectors. Implement the useReducedMotion hook in hooks/useReducedMotion.ts that detects system preferences, manages localStorage state, and provides toggle functionality. Ensure the hook properly sets the data-reduce-motion attribute on the document root element.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test that CSS properly disables animations when prefers-reduced-motion is set. Verify hook correctly reads system preferences, stores user preferences in localStorage, and updates the data-reduce-motion attribute. Test toggle functionality switches between states correctly."
           },
           {
@@ -1506,7 +1506,7 @@
               4
             ],
             "details": "Develop components/ui/MotionToggle.tsx with proper ARIA attributes including aria-pressed and aria-label. Include visual indicators for animation state (on/off icons) and show when user has overridden system preferences. Integrate the toggle into the Footer component after social links with appropriate styling and responsive design considerations.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify toggle button has correct ARIA attributes and keyboard accessibility. Test visual state changes match the actual motion preference. Confirm the toggle appears correctly in the footer across all screen sizes and the custom indicator shows when user preference differs from system."
           },
           {
@@ -1517,7 +1517,7 @@
               4
             ],
             "details": "Create utils/motion.ts with createMotionVariants function that returns simplified variants when motion is reduced. Update all Framer Motion animated components to use the useReducedMotion hook and conditional variants. Modify number counter components to display final values instantly when shouldReduceMotion is true. Ensure all scroll animations and parallax effects are disabled appropriately.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test that Framer Motion variants return opacity-only animations when motion is reduced. Verify number counters show final values immediately without animation. Confirm all existing animations throughout the site respect the motion preference and that no animations are missed."
           }
         ]
@@ -1702,7 +1702,7 @@
     ],
     "metadata": {
       "created": "2025-10-27T19:54:13.545Z",
-      "updated": "2025-10-28T20:41:53.449Z",
+      "updated": "2025-10-28T20:43:03.575Z",
       "description": "Tasks for master context"
     }
   }

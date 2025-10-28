@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import MotionToggle from '../ui/MotionToggle';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -93,13 +94,18 @@ export default function Footer() {
 
         {/* Copyright Bar */}
         <div className="border-t border-gray-700 pt-6">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-center md:text-left text-gray-300 mb-2 md:mb-0">
-              &copy; {currentYear} Texas Five Fueling. All rights reserved.
-            </p>
-            <p className="text-sm text-gray-400">
-              A <strong className="text-white">NextGen Group</strong> company
-            </p>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex items-center gap-4">
+              <MotionToggle />
+            </div>
+            <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
+              <p className="text-center text-gray-300">
+                &copy; {currentYear} Texas Five Fueling. All rights reserved.
+              </p>
+              <p className="text-sm text-gray-400">
+                A <strong className="text-white">NextGen Group</strong> company
+              </p>
+            </div>
           </div>
         </div>
       </div>
