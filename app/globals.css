@@ -75,6 +75,28 @@ body {
   transform: translateY(-4px);
 }
 
+/* Equipment Card Animations */
+.equipment-card {
+  transition: transform 300ms ease-out;
+}
+
+.equipment-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+/* Equipment grid scroll reveal animations */
+.equipment-card {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 400ms ease-out, transform 400ms ease-out;
+}
+
+.equipment-card.fade-in-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-fade-in-up {
     animation: none;
@@ -82,7 +104,8 @@ body {
     transform: none;
   }
   
-  .service-card {
+  .service-card,
+  .equipment-card {
     animation: none;
     opacity: 1;
     transform: none;
