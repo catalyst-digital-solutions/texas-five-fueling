@@ -54,7 +54,7 @@
         "dependencies": [
           1
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -62,7 +62,7 @@
             "description": "Set up `.env.local` and `.env.example` files, ensuring all required environment variables for Supabase, Resend, and Google Maps API are included and documented.",
             "dependencies": [],
             "details": "Create `.env.local` for actual values and `.env.example` for placeholders. Add all required variables (e.g., NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, RESEND_API_KEY, NEXT_PUBLIC_GOOGLE_MAPS_API_KEY). Document each variable's purpose in `.env.example`. Ensure `.env.local` is listed in `.gitignore` to prevent accidental commits of sensitive data. Follow best practices for naming and separation of public/private variables[1][3][5].",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify both files exist and contain all required variables. Check that `.env.local` is ignored by git. Confirm that `.env.example` contains only placeholders and documentation."
           },
           {
@@ -73,7 +73,7 @@
               1
             ],
             "details": "Audit codebase to confirm only variables prefixed with NEXT_PUBLIC_ are used on the client side, and all sensitive variables remain server-only. Implement runtime validation (e.g., using zod or Joi) to check for missing or misconfigured variables at startup. Optionally, centralize environment variable access in a utility for type safety and consistency. Review build artifacts to ensure no secrets are leaked[1][3][4][5].",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run the application and verify all variables are loaded without errors. Use a test component to log non-sensitive variables. Attempt to access sensitive variables from the client and confirm they are not exposed. Review build output for accidental leaks."
           }
         ]
@@ -690,14 +690,14 @@
         "id": 14,
         "title": "Leads API Endpoint Implementation",
         "description": "Create the /api/leads endpoint for form submission processing",
-        "details": "Implement the `/api/leads` API endpoint that will process form submissions, store them in the Supabase database, and send email notifications.\n\n```typescript\n// app/api/leads/route.ts\nimport { NextResponse } from 'next/server';\nimport { supabaseAdmin } from '@/lib/supabase';\nimport { Resend } from 'resend';\n\nconst resend = new Resend(process.env.RESEND_API_KEY);\nconst contactEmail = process.env.CONTACT_EMAIL || 'info@t5fueling.com';\n\nexport async function POST(request: Request) {\n  try {\n    // Parse request body\n    const body = await request.json();\n    const { name, companyName, email, phone, serviceType, location, message } = body;\n    \n    // Validate required fields\n    if (!name || !email || !phone || !serviceType || !location) {\n      return NextResponse.json(\n        { error: 'Missing required fields' },\n        { status: 400 }\n      );\n    }\n    \n    // Rate limiting (simple implementation)\n    // For production, consider using a more robust solution\n    \n    // Store in Supabase\n    const { data, error } = await supabaseAdmin\n      .from('lead_submissions')\n      .insert([\n        {\n          name,\n          company_name: companyName,\n          email,\n          phone,\n          service_type: serviceType,\n          location,\n          message,\n          status: 'new'\n        }\n      ])\n      .select();\n    \n    if (error) {\n      console.error('Supabase error:', error);\n      return NextResponse.json(\n        { error: 'Failed to store lead submission' },\n        { status: 500 }\n      );\n    }\n    \n    // Send email notification\n    const serviceTypeMap: Record<string, string> = {\n      'diesel-generator': 'Diesel Generator Refueling',\n      'equipment-refueling': 'Equipment Refueling',\n      'job-site-delivery': 'Job Site Fuel Delivery',\n      'shop-fueling': 'Shop Fueling Services',\n      'def-refilling': 'DEF Re-filling'\n    };\n    \n    const emailResult = await resend.emails.send({\n      from: 'Texas Five Fueling <no-reply@t5fueling.com>',\n      to: [contactEmail],\n      subject: 'New Quote Request from Texas Five Fueling Website',\n      html: `\n        <h1>New Quote Request</h1>\n        <p><strong>Name:</strong> ${name}</p>\n        ${companyName ? `<p><strong>Company:</strong> ${companyName}</p>` : ''}\n        <p><strong>Email:</strong> ${email}</p>\n        <p><strong>Phone:</strong> ${phone}</p>\n        <p><strong>Service Type:</strong> ${serviceTypeMap[serviceType] || serviceType}</p>\n        <p><strong>Location:</strong> ${location}</p>\n        ${message ? `<p><strong>Message:</strong> ${message}</p>` : ''}\n        <p><strong>Submitted:</strong> ${new Date().toLocaleString()}</p>\n      `,\n    });\n    \n    if (emailResult.error) {\n      console.error('Email sending error:', emailResult.error);\n      // We still return success since the lead was stored in the database\n    }\n    \n    return NextResponse.json({ success: true, id: data?.[0]?.id });\n  } catch (error) {\n    console.error('Unexpected error:', error);\n    return NextResponse.json(\n      { error: 'Internal server error' },\n      { status: 500 }\n    );\n  }\n}\n```\n\nInstall the required dependencies:\n\n```bash\nnpm install resend\n```",
-        "testStrategy": "Test the API endpoint with various valid and invalid payloads to verify it handles them correctly. Check that leads are properly stored in the Supabase database. Verify that email notifications are sent correctly. Test error handling by simulating various error conditions.",
-        "priority": "high",
+        "status": "pending",
         "dependencies": [
           3,
           4
         ],
-        "status": "pending",
+        "priority": "high",
+        "details": "Implement the `/api/leads` API endpoint that will process form submissions, store them in the Supabase database, and send email notifications using AWS SES.\n\n```typescript\n// app/api/leads/route.ts\nimport { NextResponse } from 'next/server';\nimport { supabaseAdmin } from '@/lib/supabase';\nimport { SESClient, SendEmailCommand } from '@aws-sdk/client-ses';\n\nconst sesClient = new SESClient({\n  region: process.env.AWS_REGION || 'us-east-1',\n  credentials: {\n    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,\n    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!\n  }\n});\n\nconst contactEmail = process.env.CONTACT_EMAIL || 'info@t5fueling.com';\n\nexport async function POST(request: Request) {\n  try {\n    // Parse request body\n    const body = await request.json();\n    const { name, companyName, email, phone, serviceType, location, message } = body;\n    \n    // Validate required fields\n    if (!name || !email || !phone || !serviceType || !location) {\n      return NextResponse.json(\n        { error: 'Missing required fields' },\n        { status: 400 }\n      );\n    }\n    \n    // Store in Supabase\n    const { data, error } = await supabaseAdmin\n      .from('lead_submissions')\n      .insert([\n        {\n          name,\n          company_name: companyName,\n          email,\n          phone,\n          service_type: serviceType,\n          location,\n          message,\n          status: 'new'\n        }\n      ])\n      .select();\n    \n    if (error) {\n      console.error('Supabase error:', error);\n      return NextResponse.json(\n        { error: 'Failed to store lead submission' },\n        { status: 500 }\n      );\n    }\n    \n    // Send email notification via AWS SES\n    const serviceTypeMap: Record<string, string> = {\n      'diesel-generator': 'Diesel Generator Refueling',\n      'equipment-refueling': 'Equipment Refueling',\n      'job-site-delivery': 'Job Site Fuel Delivery',\n      'shop-fueling': 'Shop Fueling Services',\n      'def-refilling': 'DEF Re-filling'\n    };\n    \n    const emailParams = {\n      Destination: {\n        ToAddresses: [contactEmail]\n      },\n      Message: {\n        Body: {\n          Html: {\n            Data: `\n              <h1>New Quote Request</h1>\n              <p><strong>Name:</strong> ${name}</p>\n              ${companyName ? `<p><strong>Company:</strong> ${companyName}</p>` : ''}\n              <p><strong>Email:</strong> ${email}</p>\n              <p><strong>Phone:</strong> ${phone}</p>\n              <p><strong>Service Type:</strong> ${serviceTypeMap[serviceType] || serviceType}</p>\n              <p><strong>Location:</strong> ${location}</p>\n              ${message ? `<p><strong>Message:</strong> ${message}</p>` : ''}\n              <p><strong>Submitted:</strong> ${new Date().toLocaleString()}</p>\n            `\n          }\n        },\n        Subject: {\n          Data: 'New Quote Request from Texas Five Fueling Website'\n        }\n      },\n      Source: 'no-reply@t5fueling.com'\n    };\n    \n    try {\n      const command = new SendEmailCommand(emailParams);\n      await sesClient.send(command);\n    } catch (emailError) {\n      console.error('Email sending error:', emailError);\n      // We still return success since the lead was stored in the database\n    }\n    \n    return NextResponse.json({ success: true, id: data?.[0]?.id });\n  } catch (error) {\n    console.error('Unexpected error:', error);\n    return NextResponse.json(\n      { error: 'Internal server error' },\n      { status: 500 }\n    );\n  }\n}\n```\n\nInstall the required dependencies:\n\n```bash\nnpm install @aws-sdk/client-ses\n```",
+        "testStrategy": "Test the API endpoint with various valid and invalid payloads to verify it handles them correctly. Check that leads are properly stored in the Supabase database. Verify that email notifications are sent correctly through AWS SES. Test error handling by simulating various error conditions including AWS SES service failures.",
         "subtasks": [
           {
             "id": 1,
@@ -721,15 +721,15 @@
           },
           {
             "id": 3,
-            "title": "Set Up Email Notification with Resend",
-            "description": "Configure the Resend email service to send notifications when a new lead is submitted.",
+            "title": "Set Up Email Notification with AWS SES",
+            "description": "Configure the AWS SES email service to send notifications when a new lead is submitted.",
             "dependencies": [
               1,
               2
             ],
-            "details": "Install the 'resend' package, set up the RESEND_API_KEY and CONTACT_EMAIL environment variables, and implement logic to send formatted email notifications upon successful lead storage. Ensure the email content includes all relevant lead details and handle email sending errors without affecting the main API response.",
+            "details": "Install the '@aws-sdk/client-ses' package, set up the AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, and AWS_REGION environment variables, and implement logic to send formatted email notifications upon successful lead storage using AWS SES SendEmailCommand. Ensure the email content includes all relevant lead details and handle email sending errors without affecting the main API response. Verify sender email domain in AWS SES console.",
             "status": "pending",
-            "testStrategy": "Verify that emails are sent for valid submissions by checking the recipient inbox. Simulate email sending failures and confirm that the API still returns success if the lead is stored, while logging the error."
+            "testStrategy": "Verify that emails are sent for valid submissions by checking the recipient inbox through AWS SES. Simulate AWS SES sending failures and confirm that the API still returns success if the lead is stored, while logging the error. Test with sandboxed and production SES environments."
           },
           {
             "id": 4,
@@ -753,14 +753,14 @@
           },
           {
             "id": 6,
-            "title": "Configure Resend email service and notification system",
-            "description": "Set up Resend API integration for sending email notifications when new leads are submitted, including HTML email template formatting and error handling",
+            "title": "Configure AWS SES email service and notification system",
+            "description": "Set up AWS SES integration for sending email notifications when new leads are submitted, including HTML email template formatting and error handling",
             "dependencies": [
               4
             ],
-            "details": "Install and configure Resend package with API key from environment variables, create HTML email template with all lead information properly formatted, implement service type mapping for human-readable service names, handle email sending errors gracefully without failing the entire request, and configure from/to addresses using environment variables",
+            "details": "Install and configure @aws-sdk/client-ses package with AWS credentials from environment variables (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION), create HTML email template with all lead information properly formatted using SES Message structure, implement service type mapping for human-readable service names, handle AWS SES sending errors gracefully without failing the entire request, configure sender and recipient addresses using environment variables, and ensure sender email is verified in AWS SES console",
             "status": "pending",
-            "testStrategy": "Test email sending with valid Resend API credentials, verify HTML email template renders correctly with all fields, test handling of email sending failures while still returning success for database storage, and validate that all form data appears correctly in the email notification"
+            "testStrategy": "Test email sending with valid AWS SES credentials, verify HTML email template renders correctly with all fields, test handling of AWS SES failures while still returning success for database storage, validate that all form data appears correctly in the email notification, and test with both sandboxed and production SES environments"
           },
           {
             "id": 7,
@@ -784,15 +784,15 @@
           },
           {
             "id": 9,
-            "title": "Configure Resend email service and notification templates",
-            "description": "Set up Resend for sending email notifications when new leads are submitted, including HTML email templates",
+            "title": "Configure AWS SES email service and notification templates",
+            "description": "Set up AWS SES for sending email notifications when new leads are submitted, including HTML email templates",
             "dependencies": [
               7,
               8
             ],
-            "details": "Install and configure Resend package with API key from environment variables (RESEND_API_KEY). Create professional HTML email template with proper styling for lead notifications. Set up email sender domain verification in Resend dashboard. Configure fallback email address if CONTACT_EMAIL is not set. Implement email sending with proper error handling that doesn't break the API response if email fails. Add email logging for debugging purposes. Create a service type mapping for human-readable service names in emails.",
+            "details": "Install and configure @aws-sdk/client-ses package with AWS credentials from environment variables (AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION). Create professional HTML email template with proper styling for lead notifications using AWS SES Message Body format. Set up email sender domain verification in AWS SES dashboard and move out of sandbox mode if needed. Configure fallback email address if CONTACT_EMAIL is not set. Implement email sending with SendEmailCommand and proper error handling that doesn't break the API response if email fails. Add email logging for debugging purposes. Create a service type mapping for human-readable service names in emails. Amazon Q Developer will handle the AWS SDK implementation details.",
             "status": "pending",
-            "testStrategy": "Test email sending with valid Resend API key. Verify emails are received with correct formatting and data. Test graceful handling when email service is down or returns errors. Check that lead is still saved even if email fails."
+            "testStrategy": "Test email sending with valid AWS IAM credentials and SES permissions. Verify emails are received with correct formatting and data through AWS SES console monitoring. Test graceful handling when AWS SES service is down or returns errors. Check that lead is still saved even if email fails. Test both sandbox and production SES environments."
           }
         ]
       },
@@ -1620,11 +1620,24 @@
             "testStrategy": "Test with prefers-reduced-motion enabled in system settings, verify all animations are effectively disabled but content remains visible. Test screen reader compatibility. Verify animations.css loads correctly when imported in globals.css and all classes are available throughout the application."
           }
         ]
+      },
+      {
+        "id": 30,
+        "title": "AWS SES Email Service Setup and Configuration",
+        "description": "Configure AWS Simple Email Service (SES) for sending lead notification emails, including SDK installation, IAM credentials setup, domain configuration, and implementation of email sending functionality with proper error handling.",
+        "details": "Implement AWS SES integration for reliable email delivery of lead notifications with Amazon Q Developer assistance.\n\n**1. Install AWS SDK for SES:**\n```bash\nnpm install @aws-sdk/client-ses @aws-sdk/credential-providers\n```\n\n**2. Configure IAM Credentials and Environment Variables:**\n```bash\n# Add to .env.local\nAWS_REGION=us-east-1\nAWS_ACCESS_KEY_ID=your_access_key_id\nAWS_SECRET_ACCESS_KEY=your_secret_access_key\nAWS_SES_FROM_EMAIL=noreply@texasfivefueling.com\nAWS_SES_NOTIFICATION_EMAIL=info@texasfivefueling.com\n```\n\n**3. Create SES Configuration Module:**\n```typescript\n// lib/aws-ses.ts\nimport { SESClient, SendEmailCommand, VerifyEmailIdentityCommand } from '@aws-sdk/client-ses';\n\nexport const sesClient = new SESClient({\n  region: process.env.AWS_REGION || 'us-east-1',\n  credentials: {\n    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,\n    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!\n  }\n});\n\nexport async function sendNotificationEmail(leadData: any) {\n  const params = {\n    Source: process.env.AWS_SES_FROM_EMAIL!,\n    Destination: {\n      ToAddresses: [process.env.AWS_SES_NOTIFICATION_EMAIL!]\n    },\n    Message: {\n      Subject: {\n        Data: `New Lead: ${leadData.company_name || leadData.name}`,\n        Charset: 'UTF-8'\n      },\n      Body: {\n        Html: {\n          Data: generateEmailTemplate(leadData),\n          Charset: 'UTF-8'\n        },\n        Text: {\n          Data: generatePlainTextEmail(leadData),\n          Charset: 'UTF-8'\n        }\n      }\n    },\n    ReplyToAddresses: [leadData.email]\n  };\n\n  try {\n    const command = new SendEmailCommand(params);\n    const response = await sesClient.send(command);\n    return { success: true, messageId: response.MessageId };\n  } catch (error) {\n    console.error('SES Send Error:', error);\n    throw new Error(`Failed to send email: ${error.message}`);\n  }\n}\n\nfunction generateEmailTemplate(data: any): string {\n  return `\n    <!DOCTYPE html>\n    <html>\n    <head><style>\n      body { font-family: Arial, sans-serif; line-height: 1.6; }\n      .container { max-width: 600px; margin: 0 auto; padding: 20px; }\n      .header { background: #1a1a1a; color: white; padding: 20px; text-align: center; }\n      .content { background: #f4f4f4; padding: 20px; margin: 20px 0; }\n      .field { margin: 10px 0; }\n      .label { font-weight: bold; color: #333; }\n    </style></head>\n    <body>\n      <div class=\"container\">\n        <div class=\"header\">\n          <h2>New Lead Submission - Texas Five Fueling</h2>\n        </div>\n        <div class=\"content\">\n          <div class=\"field\"><span class=\"label\">Name:</span> ${data.name}</div>\n          <div class=\"field\"><span class=\"label\">Company:</span> ${data.company_name || 'N/A'}</div>\n          <div class=\"field\"><span class=\"label\">Email:</span> ${data.email}</div>\n          <div class=\"field\"><span class=\"label\">Phone:</span> ${data.phone}</div>\n          <div class=\"field\"><span class=\"label\">Service Type:</span> ${data.service_type}</div>\n          <div class=\"field\"><span class=\"label\">Location:</span> ${data.location}</div>\n          <div class=\"field\"><span class=\"label\">Message:</span><br>${data.message || 'N/A'}</div>\n          <div class=\"field\"><span class=\"label\">Submitted:</span> ${new Date(data.created_at).toLocaleString()}</div>\n        </div>\n      </div>\n    </body>\n    </html>\n  `;\n}\n\nfunction generatePlainTextEmail(data: any): string {\n  return `New Lead Submission - Texas Five Fueling\\n\\nName: ${data.name}\\nCompany: ${data.company_name || 'N/A'}\\nEmail: ${data.email}\\nPhone: ${data.phone}\\nService Type: ${data.service_type}\\nLocation: ${data.location}\\nMessage: ${data.message || 'N/A'}\\nSubmitted: ${new Date(data.created_at).toLocaleString()}`;\n}\n```\n\n**4. Create Domain Verification Utility:**\n```typescript\n// lib/aws-ses-setup.ts\nimport { sesClient } from './aws-ses';\nimport { VerifyDomainIdentityCommand, GetIdentityVerificationAttributesCommand } from '@aws-sdk/client-ses';\n\nexport async function verifyDomain(domain: string) {\n  const command = new VerifyDomainIdentityCommand({ Domain: domain });\n  const response = await sesClient.send(command);\n  return response.VerificationToken;\n}\n\nexport async function checkVerificationStatus(domain: string) {\n  const command = new GetIdentityVerificationAttributesCommand({\n    Identities: [domain]\n  });\n  const response = await sesClient.send(command);\n  return response.VerificationAttributes?.[domain]?.VerificationStatus;\n}\n```\n\n**5. Implement Error Handling and Retry Logic:**\n```typescript\n// lib/aws-ses-retry.ts\nexport async function sendEmailWithRetry(\n  sendFunction: () => Promise<any>,\n  maxRetries: number = 3,\n  delayMs: number = 1000\n) {\n  let lastError;\n  \n  for (let i = 0; i < maxRetries; i++) {\n    try {\n      return await sendFunction();\n    } catch (error) {\n      lastError = error;\n      console.error(`Email send attempt ${i + 1} failed:`, error);\n      \n      // Check for throttling errors\n      if (error.name === 'Throttling' || error.$metadata?.httpStatusCode === 429) {\n        await new Promise(resolve => setTimeout(resolve, delayMs * Math.pow(2, i)));\n        continue;\n      }\n      \n      // Check for configuration errors (don't retry)\n      if (error.name === 'MessageRejected' || error.name === 'ConfigurationSetDoesNotExist') {\n        throw error;\n      }\n      \n      // Retry other errors with exponential backoff\n      if (i < maxRetries - 1) {\n        await new Promise(resolve => setTimeout(resolve, delayMs * Math.pow(2, i)));\n      }\n    }\n  }\n  \n  throw lastError;\n}\n```\n\n**6. Create SES Health Check Endpoint:**\n```typescript\n// app/api/health/ses/route.ts\nimport { NextResponse } from 'next/server';\nimport { sesClient } from '@/lib/aws-ses';\nimport { GetSendQuotaCommand } from '@aws-sdk/client-ses';\n\nexport async function GET() {\n  try {\n    const command = new GetSendQuotaCommand({});\n    const response = await sesClient.send(command);\n    \n    return NextResponse.json({\n      status: 'healthy',\n      quota: {\n        max24HourSend: response.Max24HourSend,\n        sentLast24Hours: response.SentLast24Hours,\n        maxSendRate: response.MaxSendRate\n      }\n    });\n  } catch (error) {\n    return NextResponse.json(\n      { status: 'unhealthy', error: error.message },\n      { status: 503 }\n    );\n  }\n}\n```",
+        "testStrategy": "1. **AWS Credentials Verification:** Test that AWS credentials are correctly loaded from environment variables by running the SES health check endpoint (/api/health/ses) and verifying it returns quota information.\n\n2. **Domain Verification Testing:** Use the domain verification utility to initiate domain verification for texasfivefueling.com and verify that DNS records are properly configured by checking verification status.\n\n3. **Email Sending Test:** Create a test script that sends a sample lead notification email using the sendNotificationEmail function with mock lead data, verify the email is received at the configured notification address.\n\n4. **Error Handling Verification:** Test retry logic by temporarily using invalid credentials and confirming the retry mechanism works with exponential backoff. Test handling of throttling errors by sending multiple rapid requests.\n\n5. **Template Rendering Test:** Verify both HTML and plain text email templates render correctly with various lead data combinations, including missing optional fields. Use AWS SES simulator addresses (success@simulator.amazonses.com) for testing.\n\n6. **Integration Test:** Test the complete flow by submitting a lead through the contact form (once Task 14 is updated) and verify the email is sent successfully through AWS SES with proper formatting and all lead data included.",
+        "status": "pending",
+        "dependencies": [
+          2
+        ],
+        "priority": "high",
+        "subtasks": []
       }
     ],
     "metadata": {
       "created": "2025-10-27T19:54:13.545Z",
-      "updated": "2025-10-28T17:49:37.635Z",
+      "updated": "2025-10-28T18:53:00.372Z",
       "description": "Tasks for master context"
     }
   }

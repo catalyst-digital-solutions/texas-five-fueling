@@ -9,8 +9,10 @@ export const env = {
   SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '',
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
 
-  // Email Service (Resend)
-  RESEND_API_KEY: process.env.RESEND_API_KEY || '',
+  // Email Service (AWS SES)
+  AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID || '',
+  AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY || '',
+  AWS_REGION: process.env.AWS_REGION || 'us-east-1',
   CONTACT_EMAIL: process.env.CONTACT_EMAIL || 'info@t5fueling.com',
 
   // Google Maps API
@@ -25,7 +27,9 @@ export const env = {
  */
 export const serverEnv = {
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
-  RESEND_API_KEY: process.env.RESEND_API_KEY || '',
+  AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID || '',
+  AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY || '',
+  AWS_REGION: process.env.AWS_REGION || 'us-east-1',
 } as const;
 
 /**
@@ -51,8 +55,8 @@ export function validateEnv(): void {
     if (!serverEnv.SUPABASE_SERVICE_ROLE_KEY) {
       missing.push('SUPABASE_SERVICE_ROLE_KEY (server-only)');
     }
-    if (!serverEnv.RESEND_API_KEY) {
-      missing.push('RESEND_API_KEY (server-only)');
+    if (!serverEnv.AWS_ACCESS_KEY_ID || !serverEnv.AWS_SECRET_ACCESS_KEY) {
+      missing.push('AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY (server-only)');
     }
   }
 
@@ -78,4 +82,5 @@ if (typeof window === 'undefined') {
 export function isConfigured(key: keyof typeof env): boolean {
   return env[key] !== '';
 }
+
 
