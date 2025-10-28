@@ -1,15 +1,19 @@
+import Hero from '@/components/sections/Hero';
+import Services from '@/components/sections/Services';
+import ServiceArea from '@/components/sections/ServiceArea';
+import Equipment from '@/components/sections/Equipment';
+import TrustSection from '@/components/sections/TrustSection';
+import ContactForm from '@/components/sections/ContactForm';
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm">
-        <h1 className="text-4xl font-bold mb-4">
-          Texas Five Fueling
-        </h1>
-        <p className="text-xl text-gray-600 mb-8">
-          Commercial Diesel Delivery Service
-        </p>
-      </div>
-    </main>
+    <>
+      <Hero />
+      <Services />
+      <ServiceArea />
+      <Equipment />
+      <TrustSection />
+      <ContactForm />
+    </>
   );
 }
-

@@ -274,7 +274,7 @@
         "dependencies": [
           6
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -282,7 +282,7 @@
             "description": "Set up the root layout in app/layout.tsx, including metadata, global styles, and integration of the Header and Footer components.",
             "dependencies": [],
             "details": "Create or update app/layout.tsx to import global CSS, configure the Inter font, and define the metadata object. Ensure the layout wraps all pages with <html> and <body> tags, and includes the Header and Footer components so they appear on every page. Metadata should be set for SEO and social sharing. The layout must be compatible with Next.js App Router conventions.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Render the application and verify that the header and footer are present on all pages. Check that metadata is correctly set in the page source (title, description, Open Graph tags). Confirm global styles are applied."
           },
           {
@@ -293,7 +293,7 @@
               1
             ],
             "details": "In app/page.tsx, import all required section components (Hero, Services, ServiceArea, Equipment, TrustSection, ContactForm). Arrange them in the intended order within the page's main content area. Ensure each section renders correctly and the overall structure matches the landing page design.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Load the home page and verify that all section components appear in the correct order. Check for layout issues and confirm that each section is visible and styled as expected."
           }
         ]
@@ -1702,7 +1702,7 @@
     ],
     "metadata": {
       "created": "2025-10-27T19:54:13.545Z",
-      "updated": "2025-10-28T19:59:20.382Z",
+      "updated": "2025-10-28T20:00:41.516Z",
       "description": "Tasks for master context"
     }
   }
