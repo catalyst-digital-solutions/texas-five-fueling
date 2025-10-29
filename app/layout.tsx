@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from 'next/font/google';
 import { LazyMotion, domAnimation } from 'framer-motion';
+import Script from 'next/script';
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -54,6 +55,21 @@ export default function RootLayout({
             </main>
             <Footer />
           </ViewTransitionProvider>
+          <Script id="register-sw" strategy="afterInteractive">
+            {`
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                  navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(function(err) {
+                      console.log('ServiceWorker registration failed: ', err);
+                    });
+                });
+              }
+            `}
+          </Script>
         </body>
       </LazyMotion>
     </html>
