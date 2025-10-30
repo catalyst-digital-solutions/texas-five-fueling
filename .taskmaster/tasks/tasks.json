@@ -1762,5 +1762,103 @@
       "updated": "2025-10-29T00:58:09.512Z",
       "description": "Tasks for master context"
     }
+  },
+  "lovable-migration": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Foundation Setup and Dependencies",
+        "description": "Install and configure Shadcn/ui components, Radix UI primitives, and merge Tailwind configurations from Lovable to Next.js project",
+        "details": "1. Install Shadcn/ui CLI: npx shadcn@latest init -d\n2. Install core dependencies:\n   - @radix-ui/react-accordion@^1.2.1\n   - @radix-ui/react-dialog@^1.1.2\n   - @radix-ui/react-dropdown-menu@^2.1.2\n   - @radix-ui/react-label@^2.1.0\n   - @radix-ui/react-select@^2.1.2\n   - @radix-ui/react-slot@^1.1.0\n   - @radix-ui/react-toast@^1.2.2\n   - class-variance-authority@^0.7.1\n   - tailwind-merge@^2.5.5\n   - tailwindcss-animate@^1.0.7\n   - lucide-react@^0.468.0\n   - react-hook-form@^7.54.2\n   - zod@^3.24.1\n   - @hookform/resolvers@^3.9.1\n3. Copy tailwind.config.ts from Lovable, preserving all custom animations (fade-in, fade-in-up, scale-in, accordion-down/up)\n4. Merge CSS variables from lovable-export/src/index.css into app/globals.css, maintaining HSL color system\n5. Configure Next.js font optimization in app/layout.tsx:\n   ```typescript\n   import { Poppins, Playfair_Display } from 'next/font/google'\n   const poppins = Poppins({ subsets: ['latin'], weight: ['400', '600', '700'], variable: '--font-poppins' })\n   const playfair = Playfair_Display({ subsets: ['latin'], weight: ['400', '700'], variable: '--font-playfair' })\n   ```\n6. Copy all assets from lovable-export/src/assets/ to public/images/",
+        "testStrategy": "Verify installation by: 1) Check package.json for all dependencies 2) Run 'npm run dev' without errors 3) Confirm Tailwind classes and animations compile 4) Test font loading in browser DevTools 5) Verify all images accessible at /images/* paths 6) Check CSS variables in :root selector match Lovable's HSL values",
+        "priority": "high",
+        "dependencies": [],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 2,
+        "title": "Migrate Shadcn/ui Components and Utilities",
+        "description": "Copy all UI components, custom hooks, and utility functions from Lovable to Next.js, ensuring compatibility with React 19",
+        "details": "1. Copy entire lovable-export/src/components/ui/ directory to texasfivefueling.com/components/ui/\n2. Key components to migrate:\n   - button.tsx (with variants: default, destructive, outline, secondary, ghost, link)\n   - card.tsx (Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter)\n   - input.tsx, label.tsx, textarea.tsx (form elements)\n   - select.tsx (with SelectTrigger, SelectContent, SelectItem)\n   - toast.tsx, toaster.tsx, use-toast.ts (notification system)\n   - accordion.tsx (for mobile menu)\n   - dialog.tsx (modal support)\n3. Copy custom hooks from lovable-export/src/hooks/:\n   - useScrollReveal.ts (scroll-triggered animations)\n   - use-mobile.tsx (responsive detection)\n   - use-toast.ts (toast notifications)\n4. Copy lib/utils.ts with cn() function for className merging\n5. Update imports in all components:\n   - Change '@/components/ui' to '@/components/ui'\n   - Ensure React 19 compatibility (no deprecated APIs)\n6. Add 'use client' directive to components using hooks or state",
+        "testStrategy": "1) Import each component in a test page to verify no TypeScript errors 2) Check browser console for React 19 compatibility warnings 3) Test cn() utility with multiple className combinations 4) Verify useScrollReveal hook triggers on scroll events 5) Test use-mobile hook responds to window resize 6) Trigger test toast notification",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 3,
+        "title": "Migrate Section Components",
+        "description": "Convert all Lovable section components to Next.js client components, preserving exact styling and animations",
+        "details": "1. Create components/ directory structure:\n   - components/sections/Hero.tsx\n   - components/sections/Services.tsx\n   - components/sections/ServiceArea.tsx\n   - components/sections/Equipment.tsx\n   - components/sections/Trust.tsx\n   - components/sections/ContactForm.tsx\n   - components/layout/Header.tsx\n   - components/layout/Footer.tsx\n2. For each component:\n   - Add 'use client' directive at top\n   - Convert static image imports to Next.js Image:\n     ```typescript\n     import Image from 'next/image'\n     <Image src=\"/images/hero-bg.jpg\" alt=\"\" fill className=\"object-cover\" priority />\n     ```\n   - Preserve all Tailwind classes exactly\n   - Keep useScrollReveal() calls for animations\n   - Maintain all text content verbatim\n3. Header component specifics:\n   - Mobile menu state management (useState)\n   - Smooth scroll navigation links\n   - Sticky positioning with backdrop-blur\n4. Hero component: Use responsive images (hero-bg.jpg, hero-bg-tablet.jpg, hero-bg-mobile.jpg)\n5. Trust component: Implement counter animations with IntersectionObserver\n6. ContactForm: Keep React Hook Form + Zod validation schema unchanged",
+        "testStrategy": "1) Render each section in isolation to verify styling 2) Test scroll animations trigger correctly 3) Compare visual output with Lovable screenshots 4) Verify mobile menu opens/closes 5) Test form validation rules 6) Check responsive breakpoints (640px, 768px, 1024px, 1280px)",
+        "priority": "high",
+        "dependencies": [
+          2
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 4,
+        "title": "Configure Routing and Page Structure",
+        "description": "Set up Next.js app router structure, implement smooth scrolling navigation, and assemble the complete landing page",
+        "details": "1. Update app/layout.tsx:\n   ```typescript\n   import Header from '@/components/layout/Header'\n   import Footer from '@/components/layout/Footer'\n   export default function RootLayout({ children }) {\n     return (\n       <html lang=\"en\" className={`${poppins.variable} ${playfair.variable} scroll-smooth`}>\n         <body className=\"font-sans\">\n           <Header />\n           {children}\n           <Footer />\n         </body>\n       </html>\n     )\n   }\n   ```\n2. Create app/page.tsx importing all sections:\n   ```typescript\n   import Hero from '@/components/sections/Hero'\n   import Services from '@/components/sections/Services'\n   import ServiceArea from '@/components/sections/ServiceArea'\n   import Equipment from '@/components/sections/Equipment'\n   import Trust from '@/components/sections/Trust'\n   import ContactForm from '@/components/sections/ContactForm'\n   ```\n3. Add section IDs for anchor navigation: id=\"services\", id=\"equipment\", etc.\n4. Implement smooth scroll behavior:\n   - CSS: html { scroll-behavior: smooth; }\n   - Or use JS for more control: scrollIntoView({ behavior: 'smooth' })\n5. Remove React Router dependencies\n6. Update navigation links to use href=\"#section-id\"\n7. Implement scroll-to-top button if present in Lovable",
+        "testStrategy": "1) Click each nav link and verify smooth scroll to correct section 2) Test browser back/forward with hash URLs 3) Verify page loads at correct section when accessing /#services directly 4) Test mobile navigation closes after clicking link 5) Ensure no React Router errors in console",
+        "priority": "medium",
+        "dependencies": [
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 5,
+        "title": "Integrate Contact Form with Backend API",
+        "description": "Connect the ContactForm component to existing /api/leads endpoint with Supabase storage and AWS SES email notifications",
+        "details": "1. Update ContactForm.tsx to use fetch API:\n   ```typescript\n   const onSubmit = async (data: FormData) => {\n     try {\n       const response = await fetch('/api/leads', {\n         method: 'POST',\n         headers: { 'Content-Type': 'application/json' },\n         body: JSON.stringify(data)\n       })\n       if (!response.ok) throw new Error('Submission failed')\n       const result = await response.json()\n       toast({ title: 'Success!', description: 'We\\'ll contact you soon.' })\n       form.reset()\n     } catch (error) {\n       toast({ title: 'Error', description: 'Please try again.', variant: 'destructive' })\n     }\n   }\n   ```\n2. Verify /api/leads endpoint structure matches form data\n3. Test Supabase connection (lead storage)\n4. Test AWS SES email sending (notification to admin)\n5. Implement loading state during submission:\n   - Disable submit button\n   - Show spinner icon\n   - Prevent multiple submissions\n6. Add honeypot field for spam prevention\n7. Implement rate limiting if not already present",
+        "testStrategy": "1) Submit test form with valid data, verify Supabase entry created 2) Check admin email received via AWS SES 3) Test validation errors display correctly 4) Verify success toast appears after submission 5) Confirm form resets after successful submit 6) Test error handling with network failure simulation",
+        "priority": "high",
+        "dependencies": [
+          4
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "Performance Optimization and Build Configuration",
+        "description": "Optimize images, configure production build settings, and ensure Lighthouse score meets 90+ target",
+        "details": "1. Optimize Next.js Image components:\n   - Add sizes prop for responsive images\n   - Use priority={true} for above-fold images (hero, header)\n   - Configure image formats in next.config.js:\n     ```javascript\n     images: {\n       formats: ['image/avif', 'image/webp'],\n       deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],\n     }\n     ```\n2. Enable static optimization where possible\n3. Configure metadata in app/layout.tsx:\n   - Title, description, OpenGraph tags\n   - Favicon, apple-touch-icon\n   - Viewport settings\n4. Implement loading states for dynamic content\n5. Add error boundaries for graceful failure handling\n6. Configure CSP headers if needed\n7. Run Lighthouse audit and address issues:\n   - Ensure text contrast ratios meet WCAG AA\n   - Add aria-labels where needed\n   - Optimize Cumulative Layout Shift (CLS)\n   - Reduce First Contentful Paint (FCP)\n8. Bundle analysis: npx @next/bundle-analyzer\n9. Test production build: npm run build && npm run start",
+        "testStrategy": "1) Run Lighthouse in Chrome DevTools (target 90+ all categories) 2) Test Core Web Vitals (LCP < 2.5s, FID < 100ms, CLS < 0.1) 3) Verify images load progressively 4) Check no layout shifts during page load 5) Test on slow 3G connection 6) Verify accessibility with screen reader",
+        "priority": "medium",
+        "dependencies": [
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "Deployment and Quality Assurance",
+        "description": "Deploy to Vercel develop branch, perform comprehensive testing, and prepare for production release",
+        "details": "1. Deploy to develop branch:\n   - Push code to develop branch\n   - Verify automatic deployment to texas-five-fueling.vercel.app\n   - Check environment variables are set in Vercel dashboard\n2. Visual regression testing:\n   - Take screenshots of each section\n   - Compare pixel-by-pixel with Lovable version\n   - Document any discrepancies\n3. Cross-browser testing:\n   - Chrome 120+ (desktop/mobile)\n   - Firefox 120+ (desktop)\n   - Safari 17+ (macOS/iOS)\n   - Edge 120+ (Windows)\n4. Device testing:\n   - iPhone 12-15 (Safari)\n   - Samsung Galaxy S22+ (Chrome)\n   - iPad Pro (Safari)\n   - Desktop 1920x1080, 2560x1440\n5. Functional testing checklist:\n   - All animations trigger on scroll\n   - Mobile menu opens/closes\n   - Form validates and submits\n   - Smooth scroll navigation works\n   - No console errors or warnings\n   - All images load correctly\n   - Fonts render properly\n6. Performance monitoring:\n   - Set up Vercel Analytics\n   - Configure Web Vitals tracking\n   - Set up error tracking (Sentry optional)\n7. Create deployment documentation\n8. Prepare PR from develop to main",
+        "testStrategy": "1) Complete UAT checklist with client 2) Record video walkthrough of all functionality 3) Get written approval before merging to main 4) Test rollback procedure works 5) Verify main branch still shows Coming Soon page 6) Monitor error logs post-deployment",
+        "priority": "high",
+        "dependencies": [
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-10-30T23:44:51.052Z",
+      "updated": "2025-10-30T23:49:45.972Z",
+      "description": "Tasks for lovable-migration context"
+    }
   }
 }
