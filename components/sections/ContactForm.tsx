@@ -19,22 +19,58 @@ const ContactForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    try {
+      const formData = new FormData(e.currentTarget);
+      
+      // Combine first and last name
+      const firstName = formData.get('firstName') as string;
+      const lastName = formData.get('lastName') as string;
+      const name = `${firstName} ${lastName}`.trim();
 
-    setIsSubmitting(false);
-    setIsSuccess(true);
+      // Prepare payload matching API structure
+      const payload = {
+        name,
+        companyName: formData.get('company') as string,
+        email: formData.get('email') as string,
+        phone: formData.get('phone') as string,
+        serviceType: formData.get('serviceType') as string,
+        location: formData.get('location') as string,
+        message: formData.get('message') as string,
+      };
 
-    toast({
-      title: "Quote Request Received!",
-      description: "We'll contact you within 24 hours to discuss your fueling needs.",
-    });
+      const response = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
 
-    // Reset form after 3 seconds
-    setTimeout(() => {
-      setIsSuccess(false);
-      (e.target as HTMLFormElement).reset();
-    }, 3000);
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Submission failed');
+      }
+
+      setIsSubmitting(false);
+      setIsSuccess(true);
+
+      toast({
+        title: "Quote Request Received!",
+        description: "We'll contact you within 24 hours to discuss your fueling needs.",
+      });
+
+      // Reset form after 3 seconds
+      setTimeout(() => {
+        setIsSuccess(false);
+        (e.target as HTMLFormElement).reset();
+      }, 3000);
+    } catch (error) {
+      setIsSubmitting(false);
+      toast({
+        title: "Submission Failed",
+        description: error instanceof Error ? error.message : "Please try again later.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -127,6 +163,7 @@ const ContactForm = () => {
                   </label>
                   <Input
                     id="firstName"
+                    name="firstName"
                     type="text"
                     required
                     placeholder="John"
@@ -140,6 +177,7 @@ const ContactForm = () => {
                   </label>
                   <Input
                     id="lastName"
+                    name="lastName"
                     type="text"
                     required
                     placeholder="Doe"
@@ -155,6 +193,7 @@ const ContactForm = () => {
                 </label>
                 <Input
                   id="company"
+                  name="company"
                   type="text"
                   required
                   placeholder="Your Company LLC"
@@ -170,6 +209,7 @@ const ContactForm = () => {
                   </label>
                   <Input
                     id="email"
+                    name="email"
                     type="email"
                     required
                     placeholder="john@company.com"
@@ -183,9 +223,47 @@ const ContactForm = () => {
                   </label>
                   <Input
                     id="phone"
+                    name="phone"
                     type="tel"
                     required
                     placeholder="(123) 456-7890"
+                    disabled={isSubmitting || isSuccess}
+                    className="transition-all duration-200 focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="serviceType" className="block text-sm font-semibold mb-2">
+                    Service Type *
+                  </label>
+                  <select
+                    id="serviceType"
+                    name="serviceType"
+                    required
+                    disabled={isSubmitting || isSuccess}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background transition-all duration-200 focus:ring-2 focus:ring-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    <option value="">Select a service...</option>
+                    <option value="Generator Fueling">Generator Fueling</option>
+                    <option value="Construction Equipment">Construction Equipment</option>
+                    <option value="Heavy Machinery">Heavy Machinery</option>
+                    <option value="Fleet Fueling">Fleet Fueling</option>
+                    <option value="Emergency Delivery">Emergency Delivery</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="location" className="block text-sm font-semibold mb-2">
+                    Service Location *
+                  </label>
+                  <Input
+                    id="location"
+                    name="location"
+                    type="text"
+                    required
+                    placeholder="Houston, TX"
                     disabled={isSubmitting || isSuccess}
                     className="transition-all duration-200 focus:ring-2 focus:ring-primary"
                   />
@@ -198,6 +276,7 @@ const ContactForm = () => {
                 </label>
                 <Textarea
                   id="message"
+                  name="message"
                   required
                   placeholder="Please describe your equipment, location, and fuel requirements..."
                   rows={5}

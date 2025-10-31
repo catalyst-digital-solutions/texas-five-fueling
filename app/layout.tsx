@@ -6,6 +6,7 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { ViewTransitionProvider } from "@/providers/ViewTransitionProvider";
+import { Toaster } from "@/components/ui/toaster";
 
 const poppins = Poppins({ 
   subsets: ['latin'], 
@@ -64,6 +65,7 @@ export default function RootLayout({
             </main>
             <Footer />
           </ViewTransitionProvider>
+          <Toaster />
           <Script id="register-sw" strategy="afterInteractive">
             {`
               if ('serviceWorker' in navigator) {

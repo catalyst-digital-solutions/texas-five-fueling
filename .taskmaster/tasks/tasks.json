@@ -2052,7 +2052,7 @@
         "dependencies": [
           3
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -2060,7 +2060,7 @@
             "description": "Modify the root layout to include Header and Footer components wrapping children, add font variables and smooth scrolling class to html element",
             "dependencies": [],
             "details": "Import Header from '@/components/layout/Header' and Footer from '@/components/layout/Footer'. Update the RootLayout function to wrap children with these components. Add className with font variables (poppins.variable, playfair.variable) and scroll-smooth class to the html element. Ensure proper body className with font-sans.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify Header appears at top of all pages, Footer at bottom. Check font variables are applied correctly in browser DevTools. Confirm smooth scrolling class is present on html element."
           },
           {
@@ -2071,7 +2071,7 @@
               1
             ],
             "details": "Create app/page.tsx file and import all section components: Hero, Services, ServiceArea, Equipment, Trust, and ContactForm from their respective paths in @/components/sections/. Arrange components in the proper order matching the design. Ensure each component is properly exported and renders without errors.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Load the homepage and verify all sections render in correct order. Check browser console for any import errors. Ensure no missing component warnings."
           },
           {
@@ -2082,7 +2082,7 @@
               2
             ],
             "details": "Add id props to each section wrapper: id='hero' for Hero, id='services' for Services, id='service-area' for ServiceArea, id='equipment' for Equipment, id='trust' for Trust, and id='contact' for ContactForm. Update section component wrappers to accept and apply these IDs to their root elements.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Inspect each section in browser DevTools to confirm IDs are present. Test direct URL access with hash (e.g., /#services) loads at correct section."
           },
           {
@@ -2093,7 +2093,7 @@
               3
             ],
             "details": "Ensure scroll-smooth class is applied to html element in layout.tsx. Update all navigation links in Header component to use href='#section-id' format (e.g., href='#services', href='#equipment'). Add click handlers if needed for mobile menu closing. Implement optional scroll-to-top button if present in original design.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Click each navigation link and verify smooth animated scroll to target section. Test mobile navigation closes after link click. Check scroll behavior on different browsers."
           },
           {
@@ -2104,7 +2104,7 @@
               4
             ],
             "details": "Remove react-router-dom from package.json if present. Search codebase for any React Router imports (Link, useNavigate, BrowserRouter, etc.) and remove them. Replace any React Router Link components with regular anchor tags or Next.js Link if needed. Test entire navigation flow including browser back/forward buttons with hash URLs.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify no React Router errors in console. Test browser back/forward navigation works with hash URLs. Confirm page loads at correct section when accessing /#section-id directly. Check all nav links work on mobile and desktop."
           }
         ]
@@ -2127,7 +2127,7 @@
             "description": "Modify the ContactForm.tsx component to replace any current submission method with the fetch API, implementing the provided async onSubmit handler that posts to /api/leads endpoint",
             "dependencies": [],
             "details": "Replace existing form submission logic in ContactForm.tsx with the new fetch-based implementation. Ensure the onSubmit handler properly serializes form data to JSON, sends POST request to /api/leads with correct headers, handles both success and error responses, displays appropriate toast notifications, and resets the form on successful submission. Import and configure toast notifications if not already present.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Submit form with valid test data and verify network request is made to /api/leads endpoint, check response handling for both 200 and error status codes, confirm toast notifications appear correctly, verify form fields clear after successful submission"
           },
           {
@@ -2138,7 +2138,7 @@
               1
             ],
             "details": "Review the /api/leads route handler to document expected request body structure. Compare with ContactForm field names (name, email, phone, service, message, etc.). Update either the form data serialization or API endpoint to ensure perfect alignment. Add TypeScript interfaces for type safety between frontend and backend. Verify any required fields match between form validation and API validation.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Log the exact JSON payload being sent from ContactForm, compare with API endpoint expectations, test with various field combinations including optional fields, verify validation errors return properly formatted messages"
           },
           {
@@ -2148,8 +2148,8 @@
             "dependencies": [
               2
             ],
-            "details": "Submit test leads through the ContactForm and verify they appear in Supabase dashboard. Check that all form fields are properly mapped to database columns. Verify timestamps are correctly set, any default values are applied, and data types match schema. Test error handling for database connection issues. Ensure proper environment variables are configured for Supabase connection.",
-            "status": "pending",
+            "details": "Submit test leads through the ContactForm and verify they appear in Supabase dashboard. Check that all form fields are properly mapped to database columns. Verify timestamps are correctly set, any default values are applied, and data types match schema. Test error handling for database connection issues. Ensure proper environment variables are configured for Supabase connection.\n<info added on 2025-10-31T17:03:28.680Z>\nI'll analyze the codebase to understand the current implementation and provide a comprehensive update for the subtask.## Integration Testing Results\n\nThe form submission was successfully tested using browser automation. All 8 form fields were populated correctly:\n- First name and last name fields combined into single \"name\" field as required by API (components/sections/ContactForm.tsx:25-28)\n- Company name, email, phone, service type, location, and message all mapped correctly to API payload structure (components/sections/ContactForm.tsx:31-39)\n- Form successfully sends POST request to /api/leads endpoint with correct JSON headers (components/sections/ContactForm.tsx:41-45)\n- Error handling working properly - toast notification displayed for failures (components/sections/ContactForm.tsx:68-72)\n\n## Supabase Database Issue\n\nTesting revealed the `lead_submissions` table does not exist in the Supabase instance:\n- API endpoint at app/api/leads/route.ts:58-72 attempts to insert into non-existent table\n- Error returned: \"Could not find the table 'public.lead_submissions' in the schema cache\"\n- Supabase connection confirmed working via test endpoint at app/api/test-supabase/route.ts\n- Complete table schema created and saved to supabase/schema.sql with all necessary columns, indexes, RLS policies, and triggers\n\n## Current Status\n\nForm integration complete and functional. API endpoint properly validates all fields (app/api/leads/route.ts:31-55) and has error handling for both database and email failures. The only blocking issue is the missing Supabase table which prevents actual data storage. Once the SQL schema is executed in Supabase Dashboard, the full integration will be operational.\n</info added on 2025-10-31T17:03:28.680Z>",
+            "status": "in-progress",
             "testStrategy": "Submit multiple test forms with varied data, check Supabase dashboard for new entries, verify all fields are stored correctly, test with edge cases like long text or special characters, simulate database connection failure"
           },
           {
@@ -2383,7 +2383,7 @@
     ],
     "metadata": {
       "created": "2025-10-30T23:44:51.052Z",
-      "updated": "2025-10-31T16:43:12.483Z",
+      "updated": "2025-10-31T16:59:32.290Z",
       "description": "Tasks for lovable-migration context"
     }
   }
