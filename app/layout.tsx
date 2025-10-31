@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from 'next/font/google';
+import { Poppins, Playfair_Display } from 'next/font/google';
 import { LazyMotion, domAnimation } from 'framer-motion';
 import Script from 'next/script';
 import "./globals.css";
@@ -7,8 +7,16 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import { ViewTransitionProvider } from "@/providers/ViewTransitionProvider";
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-playfair' });
+const poppins = Poppins({ 
+  subsets: ['latin'], 
+  weight: ['400', '600', '700'], // Regular, SemiBold, Bold
+  variable: '--font-poppins' 
+});
+const playfair = Playfair_Display({ 
+  subsets: ['latin'], 
+  weight: ['400', '700'], // Regular, Bold
+  variable: '--font-playfair' 
+});
 
 export const metadata: Metadata = {
   title: 'Texas Five Fueling | Commercial Diesel Delivery Houston TX',
@@ -48,7 +56,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <LazyMotion features={domAnimation} strict>
-        <body className={`${inter.variable} ${playfair.variable} font-sans`}>
+        <body className={`${poppins.variable} ${playfair.variable} font-sans`}>
           <ViewTransitionProvider>
             <Header />
             <main>

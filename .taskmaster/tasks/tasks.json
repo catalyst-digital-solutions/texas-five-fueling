@@ -1773,8 +1773,73 @@
         "testStrategy": "Verify installation by: 1) Check package.json for all dependencies 2) Run 'npm run dev' without errors 3) Confirm Tailwind classes and animations compile 4) Test font loading in browser DevTools 5) Verify all images accessible at /images/* paths 6) Check CSS variables in :root selector match Lovable's HSL values",
         "priority": "high",
         "dependencies": [],
-        "status": "pending",
-        "subtasks": []
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Initialize Shadcn/ui with Next.js configuration",
+            "description": "Set up Shadcn/ui in the Next.js project using the CLI tool with default configurations, ensuring compatibility with the existing project structure",
+            "dependencies": [],
+            "details": "Run 'npx shadcn@latest init -d' to initialize Shadcn/ui with default settings. Configure the components.json file to use the app directory structure, set the CSS variables mode, and ensure the Tailwind configuration is properly linked. Verify the initialization creates the necessary folders and base configurations without breaking the existing Next.js setup.",
+            "status": "done",
+            "testStrategy": "Verify components.json is created with correct paths, check that lib/utils.ts contains the cn() helper function, ensure no errors when running npm run dev after initialization"
+          },
+          {
+            "id": 2,
+            "title": "Install and verify Radix UI dependencies",
+            "description": "Install all required Radix UI primitive components with exact versions specified, ensuring compatibility with React 19 and Next.js 15",
+            "dependencies": [
+              1
+            ],
+            "details": "Install the complete set of Radix UI packages: @radix-ui/react-accordion@^1.2.1, @radix-ui/react-dialog@^1.1.2, @radix-ui/react-dropdown-menu@^2.1.2, @radix-ui/react-label@^2.1.0, @radix-ui/react-select@^2.1.2, @radix-ui/react-slot@^1.1.0, and @radix-ui/react-toast@^1.2.2. Use npm install with exact versions to prevent version conflicts. After installation, create a simple test component importing each Radix primitive to ensure they resolve correctly.",
+            "status": "done",
+            "testStrategy": "Check package.json for all Radix UI dependencies with correct versions, create test imports for each package, run npm run dev to ensure no module resolution errors"
+          },
+          {
+            "id": 3,
+            "title": "Install utility dependencies for styling and forms",
+            "description": "Install class-variance-authority, tailwind-merge, tailwindcss-animate, lucide-react icons, react-hook-form, zod, and hookform resolvers",
+            "dependencies": [
+              2
+            ],
+            "details": "Install styling utilities: class-variance-authority@^0.7.1 for component variants, tailwind-merge@^2.5.5 for className merging, tailwindcss-animate@^1.0.7 for animation utilities. Install lucide-react@^0.468.0 for icons. Install form handling packages: react-hook-form@^7.54.2, zod@^3.24.1 for schema validation, and @hookform/resolvers@^3.9.1 for integration. Verify each package is compatible with the React 19 version in the project.",
+            "status": "done",
+            "testStrategy": "Verify all packages in package.json, test cn() utility function works correctly, ensure lucide icons render without errors, create a sample form with zod validation"
+          },
+          {
+            "id": 4,
+            "title": "Merge Tailwind configurations preserving custom animations",
+            "description": "Copy and merge the Tailwind configuration from Lovable project, ensuring all custom animations and CSS variables are preserved in the Next.js setup",
+            "dependencies": [
+              3
+            ],
+            "details": "Copy tailwind.config.ts from lovable-export to the Next.js project root. Preserve all custom animation definitions including fade-in, fade-in-up, scale-in, accordion-down, and accordion-up. Merge the theme extensions, ensuring custom colors reference CSS variables correctly. Add the tailwindcss-animate plugin to the plugins array. Update content paths to match Next.js app directory structure. Copy CSS variables from lovable-export/src/index.css into app/globals.css, maintaining the HSL color system and ensuring proper :root selector configuration.",
+            "status": "done",
+            "testStrategy": "Test each custom animation class in a component, verify CSS variables are accessible in DevTools, check that all Tailwind utilities compile without errors, test responsive breakpoints"
+          },
+          {
+            "id": 5,
+            "title": "Configure Next.js fonts with Poppins and Playfair Display",
+            "description": "Set up Next.js font optimization for Poppins and Playfair Display fonts, configuring CSS variables for font family usage throughout the application",
+            "dependencies": [
+              4
+            ],
+            "details": "Import Poppins and Playfair_Display from next/font/google in app/layout.tsx. Configure Poppins with weights 400, 600, 700 and variable '--font-poppins'. Configure Playfair Display with weights 400, 700 and variable '--font-playfair'. Apply font variables to the html element className. Update the Tailwind config to reference these font variables in the fontFamily theme extension. Ensure body uses font-sans by default and heading components can use font-serif for Playfair Display.",
+            "status": "done",
+            "testStrategy": "Verify fonts load in Network tab of DevTools, check CSS variables --font-poppins and --font-playfair are defined, test font-sans and font-serif utility classes render correct fonts"
+          },
+          {
+            "id": 6,
+            "title": "Migrate and organize all image assets",
+            "description": "Copy all image assets from the Lovable export to the Next.js public directory, organizing them in a logical structure for easy reference",
+            "dependencies": [
+              5
+            ],
+            "details": "Create a public/images directory if it doesn't exist. Copy all files from lovable-export/src/assets/ to public/images/, maintaining any subdirectory structure. Rename files if needed to follow consistent naming conventions (kebab-case). Create an assets manifest documenting all migrated images with their new paths. Update any hardcoded image references in the copied components to use the new /images/* paths. Ensure hero background images, logos, and service icons are all properly transferred.",
+            "status": "done",
+            "testStrategy": "Verify all images are accessible at /images/* URLs in the browser, check no 404 errors in Network tab, test images display correctly with Next.js Image component, verify file sizes are reasonable"
+          }
+        ]
       },
       {
         "id": 2,
@@ -1787,7 +1852,78 @@
           1
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Copy and verify button and card components from Lovable",
+            "description": "Migrate button.tsx and card.tsx components from lovable-export/src/components/ui/ to texasfivefueling.com/components/ui/, ensuring all variants and subcomponents are included",
+            "dependencies": [],
+            "details": "Copy button.tsx with all variants (default, destructive, outline, secondary, ghost, link) and card.tsx with all subcomponents (Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter). Add 'use client' directive at the top of each file. Update any imports from '@/components/ui' to match Next.js structure. Verify React 19 compatibility by checking for any deprecated APIs or lifecycle methods.",
+            "status": "pending",
+            "testStrategy": "Import both components in a test page, render each button variant and card subcomponent, check TypeScript compilation, and verify no React 19 warnings in browser console"
+          },
+          {
+            "id": 2,
+            "title": "Migrate form components (input, label, textarea, select)",
+            "description": "Transfer all form-related components including input.tsx, label.tsx, textarea.tsx, and select.tsx with their associated subcomponents to the Next.js project",
+            "dependencies": [],
+            "details": "Copy input.tsx, label.tsx, textarea.tsx, and select.tsx from lovable-export/src/components/ui/. For select.tsx, ensure SelectTrigger, SelectContent, and SelectItem subcomponents are included. Add 'use client' directives where necessary, especially for components using state or event handlers. Update all import paths and verify forwardRef usage is React 19 compliant.",
+            "status": "pending",
+            "testStrategy": "Create a test form using all migrated components, verify controlled and uncontrolled inputs work, test select dropdown functionality, and check accessibility attributes are preserved"
+          },
+          {
+            "id": 3,
+            "title": "Migrate toast notification system components",
+            "description": "Transfer the complete toast notification system including toast.tsx, toaster.tsx, and use-toast.ts hook to ensure notification functionality works in Next.js",
+            "dependencies": [],
+            "details": "Copy toast.tsx, toaster.tsx, and use-toast.ts from lovable-export. The use-toast.ts hook should be placed in the hooks directory while toast components go to components/ui/. Ensure the toast state management works with React 19. Add 'use client' to toaster.tsx as it uses hooks. Update any Radix UI toast primitive imports to match installed versions.",
+            "status": "pending",
+            "testStrategy": "Trigger test toasts with different variants (success, error, warning), verify toast stacking and dismissal, test keyboard navigation, and ensure proper cleanup on unmount"
+          },
+          {
+            "id": 4,
+            "title": "Migrate dialog and accordion components for modals and menus",
+            "description": "Copy dialog.tsx and accordion.tsx components, ensuring they work properly for modal functionality and mobile menu implementations",
+            "dependencies": [],
+            "details": "Transfer dialog.tsx and accordion.tsx from lovable-export/src/components/ui/. These components are critical for modal support and mobile menu functionality. Add 'use client' directives as both use state and event handlers. Verify Radix UI primitives (@radix-ui/react-dialog and @radix-ui/react-accordion) are properly imported. Check for any animation or transition compatibility issues with React 19.",
+            "status": "pending",
+            "testStrategy": "Test dialog open/close with backdrop, verify accordion expand/collapse animations, check mobile menu functionality using accordion, and test keyboard navigation and focus trap"
+          },
+          {
+            "id": 5,
+            "title": "Port custom hooks (useScrollReveal and use-mobile)",
+            "description": "Migrate custom hooks including useScrollReveal.ts for scroll animations and use-mobile.tsx for responsive detection to the Next.js hooks directory",
+            "dependencies": [],
+            "details": "Copy useScrollReveal.ts and use-mobile.tsx from lovable-export/src/hooks/ to texasfivefueling.com/hooks/. Ensure useScrollReveal properly handles scroll event listeners and cleanup. Verify use-mobile hook correctly detects viewport changes and SSR compatibility. Update any window or document references to be SSR-safe with proper checks. These hooks are essential for animations and responsive behavior.",
+            "status": "pending",
+            "testStrategy": "Test scroll animations trigger at correct scroll positions, verify use-mobile returns correct values on resize, check SSR doesn't throw window undefined errors, and test cleanup functions"
+          },
+          {
+            "id": 6,
+            "title": "Set up lib/utils with cn() function for className merging",
+            "description": "Create lib/utils.ts file with the cn() utility function for combining Tailwind classes, essential for component styling flexibility",
+            "dependencies": [],
+            "details": "Copy lib/utils.ts from lovable-export to texasfivefueling.com/lib/. The cn() function uses clsx and tailwind-merge to properly combine and deduplicate Tailwind classes. Ensure both clsx and tailwind-merge packages are installed. This utility is used throughout all components for conditional styling and variant handling. Verify the function signature and implementation matches exactly.",
+            "status": "pending",
+            "testStrategy": "Test cn() with conflicting classes to verify proper merging, test with conditional classes, verify undefined and null values are handled, and check performance with large class strings"
+          },
+          {
+            "id": 7,
+            "title": "Update all component imports and add 'use client' directives",
+            "description": "Systematically update import paths in all migrated components and add 'use client' directives where required for React 19 and Next.js App Router compatibility",
+            "dependencies": [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6
+            ],
+            "details": "Review all migrated components and update import statements from '@/components/ui' to match Next.js structure. Add 'use client' directive at the top of any component that uses hooks, state, event handlers, or browser APIs. Check for any remaining deprecated React APIs and update them for React 19 compatibility. Ensure all relative imports are correct and TypeScript can resolve all modules. This is the final verification step.",
+            "status": "pending",
+            "testStrategy": "Run full TypeScript build to catch import errors, check each component renders without hydration mismatches, verify no 'use client' warnings in console, and test a sample page using multiple components"
+          }
+        ]
       },
       {
         "id": 3,
@@ -1800,7 +1936,111 @@
           2
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create directory structure for sections and layout components",
+            "description": "Set up the complete components directory structure with sections and layout folders to organize all migrated components",
+            "dependencies": [],
+            "details": "Create components/ directory with two subdirectories: components/sections/ for Hero, Services, ServiceArea, Equipment, Trust, and ContactForm components, and components/layout/ for Header and Footer components. Ensure proper directory structure before starting component migration.",
+            "status": "pending",
+            "testStrategy": "Verify directory structure exists with correct paths: components/sections/ and components/layout/. Check that all component file paths are accessible and match the planned structure."
+          },
+          {
+            "id": 2,
+            "title": "Migrate Header component with mobile menu state management",
+            "description": "Convert the Header component to Next.js client component with mobile menu functionality, sticky positioning, and smooth scroll navigation",
+            "dependencies": [
+              1
+            ],
+            "details": "Add 'use client' directive at top of Header.tsx. Implement useState for mobile menu toggle. Convert all navigation links to use smooth scroll with href='#section-id'. Apply sticky positioning with backdrop-blur effect. Preserve all Tailwind classes exactly as in Lovable version. Ensure mobile menu opens/closes properly with hamburger icon.",
+            "status": "pending",
+            "testStrategy": "Test mobile menu opens and closes on click. Verify smooth scroll navigation to each section. Check sticky header with backdrop-blur on scroll. Test responsive behavior at different breakpoints."
+          },
+          {
+            "id": 3,
+            "title": "Migrate Hero section with responsive images and animations",
+            "description": "Convert Hero component to Next.js using Image component with responsive images for different screen sizes",
+            "dependencies": [
+              1
+            ],
+            "details": "Add 'use client' directive at top of Hero.tsx. Convert static image imports to Next.js Image component with fill and priority props. Implement responsive images using hero-bg.jpg for desktop, hero-bg-tablet.jpg for tablet, and hero-bg-mobile.jpg for mobile. Preserve all Tailwind classes and maintain useScrollReveal() hook for animations. Keep all text content exactly as in original.",
+            "status": "pending",
+            "testStrategy": "Verify correct image loads at each breakpoint (mobile < 768px, tablet 768-1024px, desktop > 1024px). Check scroll reveal animations trigger properly. Ensure image has priority loading and no layout shift."
+          },
+          {
+            "id": 4,
+            "title": "Migrate Services and ServiceArea sections",
+            "description": "Convert Services and ServiceArea components to Next.js client components preserving all styling and content",
+            "dependencies": [
+              1
+            ],
+            "details": "Add 'use client' directive at top of both Services.tsx and ServiceArea.tsx files. Convert any static image imports to Next.js Image components. Preserve all Tailwind classes exactly. Maintain useScrollReveal() calls for animation effects. Keep all service descriptions, icons, and content unchanged. Ensure grid layouts and responsive behavior match original.",
+            "status": "pending",
+            "testStrategy": "Verify grid layouts display correctly at all breakpoints. Test scroll animations trigger for both sections. Check all service cards render with correct icons and text. Validate responsive behavior matches Lovable version."
+          },
+          {
+            "id": 5,
+            "title": "Migrate Equipment section with images and animations",
+            "description": "Convert Equipment component to Next.js client component with proper image handling and scroll animations",
+            "dependencies": [
+              1
+            ],
+            "details": "Add 'use client' directive at top of Equipment.tsx. Convert all equipment images to use Next.js Image component with appropriate alt text and dimensions. Preserve all Tailwind classes for styling. Implement useScrollReveal() hook for animation effects. Maintain equipment grid layout and all descriptive content exactly as original.",
+            "status": "pending",
+            "testStrategy": "Check all equipment images load properly with Next.js Image component. Verify scroll animations trigger correctly. Test responsive grid layout at different screen sizes. Ensure no layout shifts occur during image loading."
+          },
+          {
+            "id": 6,
+            "title": "Migrate Trust section with counter animations",
+            "description": "Convert Trust component with animated counters using IntersectionObserver for triggering number animations",
+            "dependencies": [
+              1
+            ],
+            "details": "Add 'use client' directive at top of Trust.tsx. Implement IntersectionObserver to detect when counters enter viewport. Create counter animation logic to animate from 0 to target numbers (years experience, projects completed, etc). Preserve all Tailwind classes and styling. Maintain useScrollReveal() for section animation. Keep all trust indicators and text content unchanged.",
+            "status": "pending",
+            "testStrategy": "Verify counters animate from 0 to target values when scrolled into view. Test IntersectionObserver triggers correctly. Check animations only play once. Validate all trust metrics display with correct values and styling."
+          },
+          {
+            "id": 7,
+            "title": "Migrate ContactForm with React Hook Form and Zod validation",
+            "description": "Convert ContactForm component preserving React Hook Form implementation and Zod validation schema unchanged",
+            "dependencies": [
+              1
+            ],
+            "details": "Add 'use client' directive at top of ContactForm.tsx. Keep React Hook Form setup with useForm hook exactly as is. Preserve Zod validation schema without modifications. Maintain all form field components (input, textarea, select). Keep form submission logic and error handling unchanged. Preserve all Tailwind classes for styling. Ensure toast notifications work for success/error states.",
+            "status": "pending",
+            "testStrategy": "Test form validation with invalid inputs (empty fields, invalid email). Verify error messages display correctly. Test successful form submission flow. Check toast notifications appear for success/error. Validate all form fields are accessible and styled correctly."
+          },
+          {
+            "id": 8,
+            "title": "Migrate Footer component with links and styling",
+            "description": "Convert Footer component to Next.js client component maintaining all links, content, and styling",
+            "dependencies": [
+              1
+            ],
+            "details": "Add 'use client' directive at top of Footer.tsx. Convert any logo or image imports to Next.js Image component. Preserve all footer links, contact information, and social media icons. Maintain all Tailwind classes for styling including background colors and text styles. Keep responsive layout for mobile and desktop views. Ensure copyright year and company information unchanged.",
+            "status": "pending",
+            "testStrategy": "Verify all footer links are clickable and properly formatted. Check responsive layout at mobile and desktop breakpoints. Validate all contact information displays correctly. Test social media icons if present. Ensure styling matches original design."
+          },
+          {
+            "id": 9,
+            "title": "Verify all animations and responsive behavior",
+            "description": "Comprehensive testing of all migrated components to ensure animations, responsive design, and functionality match Lovable version",
+            "dependencies": [
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8
+            ],
+            "details": "Test useScrollReveal() animations trigger correctly for all sections. Verify responsive behavior at key breakpoints (640px, 768px, 1024px, 1280px). Check mobile menu functionality in Header. Validate Hero responsive images load correctly. Test Trust counter animations trigger on scroll. Verify ContactForm validation and submission. Compare visual output with Lovable screenshots. Check browser console for any React warnings or errors.",
+            "status": "pending",
+            "testStrategy": "Run through complete user journey from top to bottom. Test on multiple devices and browsers. Use Chrome DevTools to test at each breakpoint. Record any discrepancies from original Lovable version. Verify no console errors or warnings. Check performance metrics remain acceptable."
+          }
+        ]
       },
       {
         "id": 4,
@@ -1813,7 +2053,61 @@
           3
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Update app/layout.tsx with Header and Footer components",
+            "description": "Modify the root layout to include Header and Footer components wrapping children, add font variables and smooth scrolling class to html element",
+            "dependencies": [],
+            "details": "Import Header from '@/components/layout/Header' and Footer from '@/components/layout/Footer'. Update the RootLayout function to wrap children with these components. Add className with font variables (poppins.variable, playfair.variable) and scroll-smooth class to the html element. Ensure proper body className with font-sans.",
+            "status": "pending",
+            "testStrategy": "Verify Header appears at top of all pages, Footer at bottom. Check font variables are applied correctly in browser DevTools. Confirm smooth scrolling class is present on html element."
+          },
+          {
+            "id": 2,
+            "title": "Create app/page.tsx with all section component imports",
+            "description": "Build the main landing page by importing and arranging all section components in the correct order within app/page.tsx",
+            "dependencies": [
+              1
+            ],
+            "details": "Create app/page.tsx file and import all section components: Hero, Services, ServiceArea, Equipment, Trust, and ContactForm from their respective paths in @/components/sections/. Arrange components in the proper order matching the design. Ensure each component is properly exported and renders without errors.",
+            "status": "pending",
+            "testStrategy": "Load the homepage and verify all sections render in correct order. Check browser console for any import errors. Ensure no missing component warnings."
+          },
+          {
+            "id": 3,
+            "title": "Add section IDs for anchor navigation to all sections",
+            "description": "Add unique ID attributes to each section component for smooth scroll anchor navigation functionality",
+            "dependencies": [
+              2
+            ],
+            "details": "Add id props to each section wrapper: id='hero' for Hero, id='services' for Services, id='service-area' for ServiceArea, id='equipment' for Equipment, id='trust' for Trust, and id='contact' for ContactForm. Update section component wrappers to accept and apply these IDs to their root elements.",
+            "status": "pending",
+            "testStrategy": "Inspect each section in browser DevTools to confirm IDs are present. Test direct URL access with hash (e.g., /#services) loads at correct section."
+          },
+          {
+            "id": 4,
+            "title": "Implement smooth scroll behavior and update navigation links",
+            "description": "Configure smooth scrolling via CSS and update all navigation links to use hash-based anchor navigation",
+            "dependencies": [
+              3
+            ],
+            "details": "Ensure scroll-smooth class is applied to html element in layout.tsx. Update all navigation links in Header component to use href='#section-id' format (e.g., href='#services', href='#equipment'). Add click handlers if needed for mobile menu closing. Implement optional scroll-to-top button if present in original design.",
+            "status": "pending",
+            "testStrategy": "Click each navigation link and verify smooth animated scroll to target section. Test mobile navigation closes after link click. Check scroll behavior on different browsers."
+          },
+          {
+            "id": 5,
+            "title": "Remove React Router dependencies and test navigation",
+            "description": "Clean up any React Router imports and dependencies, perform comprehensive testing of the new anchor-based navigation system",
+            "dependencies": [
+              4
+            ],
+            "details": "Remove react-router-dom from package.json if present. Search codebase for any React Router imports (Link, useNavigate, BrowserRouter, etc.) and remove them. Replace any React Router Link components with regular anchor tags or Next.js Link if needed. Test entire navigation flow including browser back/forward buttons with hash URLs.",
+            "status": "pending",
+            "testStrategy": "Verify no React Router errors in console. Test browser back/forward navigation works with hash URLs. Confirm page loads at correct section when accessing /#section-id directly. Check all nav links work on mobile and desktop."
+          }
+        ]
       },
       {
         "id": 5,
@@ -1826,7 +2120,73 @@
           4
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Update ContactForm component to use fetch API for form submission",
+            "description": "Modify the ContactForm.tsx component to replace any current submission method with the fetch API, implementing the provided async onSubmit handler that posts to /api/leads endpoint",
+            "dependencies": [],
+            "details": "Replace existing form submission logic in ContactForm.tsx with the new fetch-based implementation. Ensure the onSubmit handler properly serializes form data to JSON, sends POST request to /api/leads with correct headers, handles both success and error responses, displays appropriate toast notifications, and resets the form on successful submission. Import and configure toast notifications if not already present.",
+            "status": "pending",
+            "testStrategy": "Submit form with valid test data and verify network request is made to /api/leads endpoint, check response handling for both 200 and error status codes, confirm toast notifications appear correctly, verify form fields clear after successful submission"
+          },
+          {
+            "id": 2,
+            "title": "Verify and align API endpoint data structure with form fields",
+            "description": "Ensure the /api/leads endpoint expects the exact data structure that the ContactForm component sends, checking field names, types, and validation requirements",
+            "dependencies": [
+              1
+            ],
+            "details": "Review the /api/leads route handler to document expected request body structure. Compare with ContactForm field names (name, email, phone, service, message, etc.). Update either the form data serialization or API endpoint to ensure perfect alignment. Add TypeScript interfaces for type safety between frontend and backend. Verify any required fields match between form validation and API validation.",
+            "status": "pending",
+            "testStrategy": "Log the exact JSON payload being sent from ContactForm, compare with API endpoint expectations, test with various field combinations including optional fields, verify validation errors return properly formatted messages"
+          },
+          {
+            "id": 3,
+            "title": "Test and verify Supabase database integration for lead storage",
+            "description": "Confirm that submitted form data is correctly stored in the Supabase database through the /api/leads endpoint, including all fields and proper data types",
+            "dependencies": [
+              2
+            ],
+            "details": "Submit test leads through the ContactForm and verify they appear in Supabase dashboard. Check that all form fields are properly mapped to database columns. Verify timestamps are correctly set, any default values are applied, and data types match schema. Test error handling for database connection issues. Ensure proper environment variables are configured for Supabase connection.",
+            "status": "pending",
+            "testStrategy": "Submit multiple test forms with varied data, check Supabase dashboard for new entries, verify all fields are stored correctly, test with edge cases like long text or special characters, simulate database connection failure"
+          },
+          {
+            "id": 4,
+            "title": "Test AWS SES email notification system for admin alerts",
+            "description": "Verify that AWS SES successfully sends email notifications to administrators when new leads are submitted through the contact form",
+            "dependencies": [
+              2
+            ],
+            "details": "Test email sending functionality through /api/leads endpoint. Verify AWS SES configuration including sender email, recipient addresses, and email templates. Check that email contains all relevant lead information in a readable format. Test email delivery to actual inbox (not spam). Ensure proper error handling if AWS SES fails. Verify environment variables for AWS credentials are properly set.",
+            "status": "pending",
+            "testStrategy": "Submit form and check admin email inbox for notification, verify email content includes all lead details, test with multiple recipient addresses if configured, check AWS CloudWatch logs for SES events, test fallback behavior if email fails"
+          },
+          {
+            "id": 5,
+            "title": "Implement comprehensive loading states and error handling UI",
+            "description": "Add loading indicators during form submission, disable submit button to prevent duplicates, and implement robust error handling with user-friendly messages",
+            "dependencies": [
+              1
+            ],
+            "details": "Add isSubmitting state to ContactForm component. Show spinner icon in submit button during submission. Disable all form inputs and submit button while processing. Implement try-catch error handling with specific error messages for different failure scenarios (network error, validation error, server error). Add visual feedback for errors using destructive toast variants. Ensure form remains functional after errors occur.",
+            "status": "pending",
+            "testStrategy": "Test submit button shows loading state during submission, verify button and inputs are disabled while processing, test with slow network to see loading state, trigger various error scenarios and check appropriate messages display, ensure form recovers from errors gracefully"
+          },
+          {
+            "id": 6,
+            "title": "Add spam prevention measures and implement rate limiting",
+            "description": "Implement a honeypot field for bot detection and add rate limiting to prevent abuse of the contact form submission endpoint",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Add invisible honeypot field to ContactForm that bots might fill but humans won't see. Implement client-side check to reject submissions with filled honeypot. Add rate limiting to /api/leads endpoint using appropriate middleware or manual implementation with IP tracking. Store rate limit data in memory or cache. Configure reasonable limits like 5 submissions per IP per hour. Return 429 status code when rate limit exceeded with retry-after header.",
+            "status": "pending",
+            "testStrategy": "Test honeypot field is invisible to users but present in DOM, verify form rejects submission when honeypot is filled programmatically, test rate limiting by submitting multiple forms rapidly, verify 429 response after limit reached, check rate limit resets after time period"
+          }
+        ]
       },
       {
         "id": 6,
@@ -1839,7 +2199,81 @@
           5
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Configure Next.js Image optimization with proper sizes and priority",
+            "description": "Set up Next.js Image components with responsive sizes prop, priority loading for above-fold images, and configure image formats in next.config.js for optimal performance",
+            "dependencies": [],
+            "details": "Update all Next.js Image components to include proper sizes prop for responsive loading. Add priority={true} to hero section and header images. Configure next.config.js with AVIF and WebP formats, and define appropriate deviceSizes array [640, 750, 828, 1080, 1200, 1920, 2048, 3840]. Ensure lazy loading is enabled for below-fold images.",
+            "status": "pending",
+            "testStrategy": "Verify images load with correct srcset attributes, check Network tab for appropriate image sizes at different viewports, confirm priority images load immediately, test AVIF/WebP fallback to JPEG"
+          },
+          {
+            "id": 2,
+            "title": "Set up metadata and SEO tags in layout",
+            "description": "Configure comprehensive metadata in app/layout.tsx including title, description, OpenGraph tags, favicon, apple-touch-icon, and viewport settings for optimal SEO and social sharing",
+            "dependencies": [],
+            "details": "Implement metadata export in app/layout.tsx with dynamic title template, description, keywords, OpenGraph tags (title, description, images, site_name, locale), Twitter card metadata, canonical URLs, favicon links, apple-touch-icon, and proper viewport configuration. Add structured data JSON-LD for local business schema.",
+            "status": "pending",
+            "testStrategy": "Use SEO testing tools to verify all meta tags, test OpenGraph preview with Facebook/Twitter debuggers, check favicon display across browsers, validate structured data with Google's testing tool"
+          },
+          {
+            "id": 3,
+            "title": "Implement loading states and error boundaries",
+            "description": "Add loading.tsx files for route segments, create custom error boundaries for graceful failure handling, and implement skeleton loaders for dynamic content sections",
+            "dependencies": [],
+            "details": "Create loading.tsx files in app directory for page-level loading states. Implement error.tsx for error boundary handling with retry functionality. Add Suspense boundaries with skeleton loaders for dynamic components like ContactForm and Services sections. Create custom 404 and 500 error pages with helpful navigation options.",
+            "status": "pending",
+            "testStrategy": "Simulate slow network to test loading states, trigger errors to verify error boundaries catch and display correctly, test fallback UI renders properly, verify error recovery works with retry buttons"
+          },
+          {
+            "id": 4,
+            "title": "Run initial Lighthouse audit and document baseline",
+            "description": "Perform comprehensive Lighthouse audit to establish baseline scores across Performance, Accessibility, Best Practices, and SEO categories, documenting all issues for optimization",
+            "dependencies": [
+              1,
+              2,
+              3
+            ],
+            "details": "Run Lighthouse audit in Chrome DevTools for both mobile and desktop views. Document baseline scores for all categories. Create detailed list of issues including performance metrics (LCP, FID, CLS, FCP, TTI, TBT), accessibility violations, best practice warnings, and SEO improvements needed. Prioritize issues by impact on score.",
+            "status": "pending",
+            "testStrategy": "Run multiple Lighthouse audits to ensure consistent baseline, test in incognito mode to avoid extensions interference, verify audit covers all page sections including dynamic content"
+          },
+          {
+            "id": 5,
+            "title": "Optimize Core Web Vitals (LCP, FID, CLS)",
+            "description": "Implement targeted optimizations to improve Largest Contentful Paint, First Input Delay, and Cumulative Layout Shift to meet Core Web Vitals thresholds",
+            "dependencies": [
+              4
+            ],
+            "details": "Optimize LCP by preloading hero image, using priority loading, and reducing render-blocking resources. Improve FID by code-splitting, reducing JavaScript execution time, and implementing web workers for heavy computations. Fix CLS by adding explicit dimensions to images/videos, avoiding dynamic content injection, and using CSS aspect-ratio. Implement font-display: swap for web fonts.",
+            "status": "pending",
+            "testStrategy": "Use Chrome DevTools Performance panel to measure improvements, test with Web Vitals extension, verify metrics meet targets (LCP < 2.5s, FID < 100ms, CLS < 0.1), test on throttled connections"
+          },
+          {
+            "id": 6,
+            "title": "Configure production build settings",
+            "description": "Set up production build optimizations including bundle analysis, static optimization, CSP headers configuration, and build-time environment variables",
+            "dependencies": [
+              5
+            ],
+            "details": "Configure next.config.js for production optimizations: enable SWC minification, configure output: 'standalone', set up redirects and headers including CSP. Run bundle analyzer to identify optimization opportunities. Enable static HTML export where possible. Configure environment variables for production API endpoints. Set up compression and caching headers.",
+            "status": "pending",
+            "testStrategy": "Run npm run build && npm run start to test production build, analyze bundle sizes with @next/bundle-analyzer, verify CSP headers don't break functionality, test gzip/brotli compression is working"
+          },
+          {
+            "id": 7,
+            "title": "Final Lighthouse audit to verify 90+ scores",
+            "description": "Perform final comprehensive Lighthouse audit to confirm all categories achieve 90+ scores, document improvements made, and create performance budget for monitoring",
+            "dependencies": [
+              6
+            ],
+            "details": "Run final Lighthouse audits on production build for both mobile and desktop. Verify all categories (Performance, Accessibility, Best Practices, SEO) score 90 or higher. Document final metrics and improvements from baseline. Create performance budget configuration for ongoing monitoring. Generate Lighthouse CI configuration for automated testing in CI/CD pipeline.",
+            "status": "pending",
+            "testStrategy": "Run multiple audits to ensure consistent 90+ scores, test on various network conditions, verify scores on actual deployed site match local production build, set up monitoring alerts for regression"
+          }
+        ]
       },
       {
         "id": 7,
@@ -1852,12 +2286,104 @@
           6
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Deploy to Vercel develop branch",
+            "description": "Push code to develop branch and verify automatic deployment to texas-five-fueling.vercel.app",
+            "dependencies": [],
+            "details": "Push latest code from local to develop branch using git push origin develop. Monitor Vercel dashboard for build progress and ensure deployment completes successfully without build errors. Verify the site is accessible at texas-five-fueling.vercel.app and all pages load correctly.",
+            "status": "pending",
+            "testStrategy": "Access deployed URL and verify all pages load, check Vercel build logs for errors, test basic navigation functionality"
+          },
+          {
+            "id": 2,
+            "title": "Verify environment variables in Vercel dashboard",
+            "description": "Check and configure all required environment variables are properly set in Vercel project settings",
+            "dependencies": [
+              1
+            ],
+            "details": "Access Vercel dashboard project settings and verify all environment variables from .env.local are configured, including Supabase URLs, AWS SES credentials, and any API keys. Ensure variables are set for the develop environment and match local development values.",
+            "status": "pending",
+            "testStrategy": "Test form submission to verify AWS SES integration works, check browser console for missing environment variable errors"
+          },
+          {
+            "id": 3,
+            "title": "Perform visual regression testing against Lovable version",
+            "description": "Take screenshots of each section and compare pixel-by-pixel with Lovable version to document discrepancies",
+            "dependencies": [
+              1
+            ],
+            "details": "Use browser dev tools or automated screenshot tools to capture each major section (hero, services, equipment, about, contact). Compare side-by-side with Lovable version screenshots. Document any visual differences in spacing, colors, fonts, or animations. Create a visual diff report highlighting discrepancies.",
+            "status": "pending",
+            "testStrategy": "Use visual diff tools like Percy or manually compare screenshots, document all differences in a markdown file"
+          },
+          {
+            "id": 4,
+            "title": "Execute cross-browser testing checklist",
+            "description": "Test site functionality across Chrome, Firefox, Safari, and Edge browsers on desktop platforms",
+            "dependencies": [
+              1
+            ],
+            "details": "Test on Chrome 120+ (desktop and mobile emulation), Firefox 120+ desktop, Safari 17+ on macOS, and Edge 120+ on Windows. Verify all animations, interactions, and styling render correctly. Check for browser-specific CSS issues, JavaScript errors, and font rendering problems. Document any browser-specific bugs found.",
+            "status": "pending",
+            "testStrategy": "Use BrowserStack or manual testing, create checklist for each browser marking pass/fail for key features"
+          },
+          {
+            "id": 5,
+            "title": "Complete mobile device testing",
+            "description": "Test on iPhone, Samsung Galaxy, and iPad devices to ensure responsive design and touch interactions work",
+            "dependencies": [
+              1
+            ],
+            "details": "Test on iPhone 12-15 with Safari, Samsung Galaxy S22+ with Chrome, and iPad Pro with Safari. Verify responsive layouts adapt correctly, touch interactions work smoothly, mobile menu functions properly, and forms are usable on touch devices. Check for viewport issues, font scaling, and image loading performance.",
+            "status": "pending",
+            "testStrategy": "Use real devices or Chrome DevTools device emulation, test all interactive elements with touch input"
+          },
+          {
+            "id": 6,
+            "title": "Run functional testing checklist",
+            "description": "Verify all interactive features including animations, navigation, form submission, and performance",
+            "dependencies": [
+              2
+            ],
+            "details": "Test scroll animations trigger correctly, mobile menu opens/closes smoothly, contact form validates and submits to AWS SES, smooth scroll navigation works between sections, no console errors or warnings appear, all images load with proper optimization, and fonts render correctly using Inter font family.",
+            "status": "pending",
+            "testStrategy": "Create detailed checklist covering all functionality, test each item systematically and document results"
+          },
+          {
+            "id": 7,
+            "title": "Set up monitoring and analytics",
+            "description": "Configure Vercel Analytics, Web Vitals tracking, and optional error tracking with Sentry",
+            "dependencies": [
+              1,
+              2
+            ],
+            "details": "Enable Vercel Analytics in project settings to track page views and performance metrics. Configure Web Vitals monitoring to track Core Web Vitals (LCP, FID, CLS). Optionally set up Sentry for error tracking and monitoring. Create custom events for form submissions and key user interactions. Verify data is being collected properly.",
+            "status": "pending",
+            "testStrategy": "Verify analytics dashboard shows data, trigger test errors to confirm error tracking, check Web Vitals scores"
+          },
+          {
+            "id": 8,
+            "title": "Prepare and submit PR to main branch",
+            "description": "Create deployment documentation and submit pull request from develop to main branch for production release",
+            "dependencies": [
+              3,
+              4,
+              5,
+              6,
+              7
+            ],
+            "details": "Create comprehensive deployment documentation including test results, known issues, rollback procedures, and environment setup. Write detailed PR description summarizing all changes, testing completed, and deployment checklist. Submit PR from develop to main branch, request code review, and prepare for production deployment after approval.",
+            "status": "pending",
+            "testStrategy": "Verify PR has no merge conflicts, all CI/CD checks pass, and documentation is complete and accurate"
+          }
+        ]
       }
     ],
     "metadata": {
       "created": "2025-10-30T23:44:51.052Z",
-      "updated": "2025-10-30T23:49:45.972Z",
+      "updated": "2025-10-31T01:28:07.351Z",
       "description": "Tasks for lovable-migration context"
     }
   }

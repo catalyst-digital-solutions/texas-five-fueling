@@ -1,27 +1,138 @@
 @import '../styles/animations.css';
+
+@plugin 'tailwindcss-animate';
 @import '../styles/motion.css';
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #000000;
-}
+/* ============================================
+   LOVABLE CSS VARIABLES (HSL-based Design System)
+   All colors MUST be HSL
+   ============================================ */
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Texas Five Brand Colors */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 20%;
+
+    /* Brand Red #a81b1b → HSL: 0 72% 38% */
+    --primary: 0 72% 38%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Dark Gray #333333 → HSL: 0 0% 20% */
+    --secondary: 0 0% 20%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+
+    --accent: 0 72% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 0 72% 38%;
+
+    --radius: 0.5rem;
+
+    /* Gradients and shadows */
+    --gradient-hero: linear-gradient(135deg, hsl(0 72% 38%), hsl(0 72% 28%));
+    --shadow-glow: 0 10px 40px -10px hsl(0 72% 38% / 0.4);
+  }
+
+  .dark {
+    --background: 0 0% 8%;
+    --foreground: 0 0% 95%;
+
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 95%;
+
+    --primary: 0 72% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 95%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+
+    --accent: 0 72% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 40%;
+    --destructive-foreground: 0 0% 95%;
+
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 72% 45%;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans font-bold;
+  }
 }
+
+/* ============================================
+   LOVABLE SCROLL REVEAL UTILITIES
+   ============================================ */
+
+@layer utilities {
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .hover-lift {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px -8px hsl(0 0% 20% / 0.3);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* ============================================
+   EXISTING ANIMATIONS (PRESERVED)
+   ============================================ */
 
 /* Grid Pattern */
 .bg-grid-pattern {
@@ -29,12 +140,6 @@ body {
     linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
   background-size: 50px 50px;
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
 }
 
 /* Hero Section Animations */
@@ -100,29 +205,6 @@ body {
   transform: translateY(0);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .animate-fade-in-up {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-  
-  .service-card,
-  .equipment-card {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-  
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
 /* ============================================
    VIEW TRANSITIONS API
    ============================================ */
@@ -134,48 +216,39 @@ body {
     animation-duration: 300ms;
     animation-timing-function: ease-out;
   }
-  
+
   ::view-transition-old(root) {
     animation-name: fade-out;
   }
-  
+
   ::view-transition-new(root) {
     animation-name: fade-in;
   }
-  
+
   @keyframes fade-out {
     from { opacity: 1; }
     to { opacity: 0; }
   }
-  
+
   @keyframes fade-in {
     from { opacity: 0; }
     to { opacity: 1; }
   }
-  
+
   /* Named view transitions for hero elements */
   .hero-title {
     view-transition-name: hero-title;
   }
-  
+
   .hero-image {
     view-transition-name: hero-image;
   }
-  
+
   /* Named view transition animations */
   ::view-transition-group(hero-title),
   ::view-transition-group(hero-image) {
     animation-duration: 400ms;
     animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-}
-
-/* Skip transitions for reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-group(*),
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation: none !important;
   }
 }
 
@@ -231,18 +304,39 @@ body {
   animation: spin 1s linear infinite;
 }
 
-/* Disable animations for reduced motion */
+/* ============================================
+   REDUCED MOTION SUPPORT (CRITICAL)
+   ============================================ */
+
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal,
+  .animate-fade-in-up,
+  .service-card,
+  .equipment-card {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
   .form-success-message,
   .error-message,
   .loading-spinner {
     animation: none !important;
     transition: none !important;
   }
-  
-  .error-message {
-    opacity: 1 !important;
-    transform: none !important;
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }
-
