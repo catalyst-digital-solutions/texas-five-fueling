@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import Button from '../ui/Button';
+import { Button } from '../ui/button';
 
 export default function Header() {
   return (
@@ -39,7 +39,7 @@ export default function Header() {
             
             {/* Get Quote Button */}
             <Link href="#contact-form">
-              <Button variant="primary" size="sm">
+              <Button variant="default" size="sm">
                 Get a Quote
               </Button>
             </Link>

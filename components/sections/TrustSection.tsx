@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { m } from '@/lib/motion';
 import { useInView } from 'framer-motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
-import Button from '../ui/Button';
+import { Button } from '../ui/button';
 
 interface CounterProps {
   target: number;

@@ -1851,7 +1851,7 @@
         "dependencies": [
           1
         ],
-        "status": "in-progress",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -1920,7 +1920,7 @@
               6
             ],
             "details": "Review all migrated components and update import statements from '@/components/ui' to match Next.js structure. Add 'use client' directive at the top of any component that uses hooks, state, event handlers, or browser APIs. Check for any remaining deprecated React APIs and update them for React 19 compatibility. Ensure all relative imports are correct and TypeScript can resolve all modules. This is the final verification step.\n<info added on 2025-10-31T01:32:20.271Z>\nI'll analyze the codebase to provide an accurate update for the subtask. Let me explore the project structure and check the current state of the migrated components.Let me check for the hooks directory and count the total components:Now let me check a few specific components to see if they already have 'use client' directives:Now let me check a few more components to get a comprehensive list of which ones need 'use client':Let me check more specifically for React hooks and client-side features:Let me check the path correctly:Let me get more components and check if 'use client' is already present:Now let me check if any of these already have 'use client' directive:None of the components have the 'use client' directive yet. Let me check the lib/utils.ts file:Progress Update:\n\n✅ Verified component migration status:\n- Confirmed all 49 UI components successfully copied to components/ui/\n- Found 42 components that use React hooks/context and require 'use client' directive\n- Custom hooks directory contains 5 hooks: useViewTransition.ts, useReducedMotion.ts, use-mobile.tsx, use-toast.ts, useScrollReveal.ts\n- lib/utils.ts with cn() function confirmed in place\n\n⚠️ Critical finding: None of the migrated components have 'use client' directives yet\n\n📋 Components requiring 'use client' directive (42 total):\naccordion.tsx, alert-dialog.tsx, alert.tsx, avatar.tsx, breadcrumb.tsx, button.tsx, card.tsx, carousel.tsx, chart.tsx, checkbox.tsx, command.tsx, context-menu.tsx, dialog.tsx, drawer.tsx, dropdown-menu.tsx, form.tsx, hover-card.tsx, input-otp.tsx, input.tsx, label.tsx, menubar.tsx, navigation-menu.tsx, pagination.tsx, popover.tsx, progress.tsx, radio-group.tsx, scroll-area.tsx, select.tsx, separator.tsx, sheet.tsx, sidebar.tsx, slider.tsx, sonner.tsx, switch.tsx, table.tsx, tabs.tsx, textarea.tsx, toast.tsx, toaster.tsx, toggle-group.tsx, toggle.tsx, tooltip.tsx\n\nNext steps: Add 'use client' directives to all 42 identified components, then verify all import paths resolve correctly in Next.js structure.\n</info added on 2025-10-31T01:32:20.271Z>",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run full TypeScript build to catch import errors, check each component renders without hydration mismatches, verify no 'use client' warnings in console, and test a sample page using multiple components"
           }
         ]
@@ -2383,7 +2383,7 @@
     ],
     "metadata": {
       "created": "2025-10-30T23:44:51.052Z",
-      "updated": "2025-10-31T01:30:19.747Z",
+      "updated": "2025-10-31T01:43:26.738Z",
       "description": "Tasks for lovable-migration context"
     }
   }

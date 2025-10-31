@@ -1,6 +1,6 @@
 'use client';
 
-import Button from '../ui/Button';
+import { Button } from '../ui/button';
 
 export default function ServiceArea() {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;

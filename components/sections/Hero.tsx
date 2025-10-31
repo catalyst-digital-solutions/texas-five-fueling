@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import Button from '../ui/Button';
+import { Button } from '../ui/button';
 
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false);

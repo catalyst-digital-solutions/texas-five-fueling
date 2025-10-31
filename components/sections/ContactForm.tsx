@@ -1,10 +1,10 @@
 'use client';
 
 import { useState, FormEvent } from 'react';
-import Button from '../ui/Button';
-import Input from '../ui/Input';
-import Textarea from '../ui/Textarea';
-import Select from '../ui/Select';
+import { Button } from '../ui/button';
+import { Input } from '../ui/input';
+import { Textarea } from '../ui/textarea';
+import { Select } from '../ui/select';
 
 type FormData = {
   name: string;

@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import MotionToggle from '../ui/MotionToggle';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -95,9 +94,6 @@ export default function Footer() {
         {/* Copyright Bar */}
         <div className="border-t border-gray-700 pt-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-4">
-              <MotionToggle />
-            </div>
             <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
               <p className="text-center text-gray-300">
                 &copy; {currentYear} Texas Five Fueling. All rights reserved.
