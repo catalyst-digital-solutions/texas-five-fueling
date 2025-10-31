@@ -2198,7 +2198,7 @@
         "dependencies": [
           5
         ],
-        "status": "pending",
+        "status": "done",
         "subtasks": [
           {
             "id": 1,
@@ -2248,7 +2248,7 @@
               4
             ],
             "details": "Optimize LCP by preloading hero image, using priority loading, and reducing render-blocking resources. Improve FID by code-splitting, reducing JavaScript execution time, and implementing web workers for heavy computations. Fix CLS by adding explicit dimensions to images/videos, avoiding dynamic content injection, and using CSS aspect-ratio. Implement font-display: swap for web fonts.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Use Chrome DevTools Performance panel to measure improvements, test with Web Vitals extension, verify metrics meet targets (LCP < 2.5s, FID < 100ms, CLS < 0.1), test on throttled connections"
           },
           {
@@ -2259,7 +2259,7 @@
               5
             ],
             "details": "Configure next.config.js for production optimizations: enable SWC minification, configure output: 'standalone', set up redirects and headers including CSP. Run bundle analyzer to identify optimization opportunities. Enable static HTML export where possible. Configure environment variables for production API endpoints. Set up compression and caching headers.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run npm run build && npm run start to test production build, analyze bundle sizes with @next/bundle-analyzer, verify CSP headers don't break functionality, test gzip/brotli compression is working"
           },
           {
@@ -2270,7 +2270,7 @@
               6
             ],
             "details": "Run final Lighthouse audits on production build for both mobile and desktop. Verify all categories (Performance, Accessibility, Best Practices, SEO) score 90 or higher. Document final metrics and improvements from baseline. Create performance budget configuration for ongoing monitoring. Generate Lighthouse CI configuration for automated testing in CI/CD pipeline.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Run multiple audits to ensure consistent 90+ scores, test on various network conditions, verify scores on actual deployed site match local production build, set up monitoring alerts for regression"
           }
         ]
@@ -2383,7 +2383,7 @@
     ],
     "metadata": {
       "created": "2025-10-30T23:44:51.052Z",
-      "updated": "2025-10-31T17:24:20.264Z",
+      "updated": "2025-10-31T17:29:25.339Z",
       "description": "Tasks for lovable-migration context"
     }
   }

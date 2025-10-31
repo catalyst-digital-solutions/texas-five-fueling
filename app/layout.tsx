@@ -11,12 +11,14 @@ import { Toaster } from "@/components/ui/toaster";
 const poppins = Poppins({ 
   subsets: ['latin'], 
   weight: ['400', '600', '700'], // Regular, SemiBold, Bold
-  variable: '--font-poppins' 
+  variable: '--font-poppins',
+  display: 'swap', // Optimize font loading - prevent invisible text
 });
 const playfair = Playfair_Display({ 
   subsets: ['latin'], 
   weight: ['400', '700'], // Regular, Bold
-  variable: '--font-playfair' 
+  variable: '--font-playfair',
+  display: 'swap', // Optimize font loading - prevent invisible text
 });
 
 export const metadata: Metadata = {
@@ -83,6 +85,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        {/* Preconnect to Google Fonts for faster font loading */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
       <LazyMotion features={domAnimation} strict>
         <body className={`${poppins.variable} ${playfair.variable} font-sans`}>
           <ViewTransitionProvider>
