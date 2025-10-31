@@ -52,6 +52,7 @@ const Header = () => {
               height={80}
               className="h-[80px] w-auto transition-opacity duration-500"
               priority
+              sizes="200px"
             />
           </button>
 

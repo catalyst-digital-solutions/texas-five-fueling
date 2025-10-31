@@ -152,6 +152,7 @@ const Equipment = () => {
                 width={800}
                 height={400}
                 className="w-full h-64 object-cover rounded-lg"
+                sizes="(max-width: 768px) 100vw, 800px"
               />
             )}
             <p className="text-lg text-muted-foreground leading-relaxed">

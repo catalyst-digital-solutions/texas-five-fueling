@@ -25,6 +25,7 @@ const Footer = () => {
               width={200}
               height={60}
               className="h-[60px] w-auto mb-4"
+              sizes="200px"
             />
             <p className="text-white/70 mb-4">
               Professional diesel delivery services for commercial and industrial clients throughout the Houston area.
