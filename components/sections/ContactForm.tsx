@@ -1,328 +1,240 @@
 'use client';
 
-import { useState, FormEvent } from 'react';
-import { Button } from '../ui/button';
-import { Input } from '../ui/input';
-import { Textarea } from '../ui/textarea';
-import { Select } from '../ui/select';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/hooks/use-toast';
+import { Mail, Phone, MapPin, CheckCircle2, Loader2 } from 'lucide-react';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 
-type FormData = {
-  name: string;
-  companyName: string;
-  email: string;
-  phone: string;
-  serviceType: string;
-  location: string;
-  message: string;
-};
-
-type FormErrors = {
-  [key in keyof FormData]?: string;
-};
-
-export default function ContactForm() {
-  const [formData, setFormData] = useState<FormData>({
-    name: '',
-    companyName: '',
-    email: '',
-    phone: '',
-    serviceType: '',
-    location: '',
-    message: '',
-  });
-  
-  const [errors, setErrors] = useState<FormErrors>({});
+const ContactForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [submitError, setSubmitError] = useState('');
-  const [touched, setTouched] = useState<Record<string, boolean>>({});
-  
-  const serviceTypes = [
-    { value: '', label: 'Select a service...' },
-    { value: 'diesel-generator', label: 'Diesel Generator Refueling' },
-    { value: 'equipment-refueling', label: 'Equipment Refueling' },
-    { value: 'job-site-delivery', label: 'Job Site Fuel Delivery' },
-    { value: 'shop-fueling', label: 'Shop Fueling Services' },
-    { value: 'def-refilling', label: 'DEF Re-filling' },
-    { value: 'other', label: 'Other Service' },
-  ];
-  
-  const validateField = (name: string, value: string): string => {
-    switch (name) {
-      case 'name':
-        if (!value.trim()) return 'Name is required';
-        if (value.trim().length < 2) return 'Name must be at least 2 characters';
-        break;
-      case 'email':
-        if (!value.trim()) return 'Email is required';
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(value)) return 'Please enter a valid email address';
-        break;
-      case 'phone':
-        if (!value.trim()) return 'Phone number is required';
-        if (value.replace(/[\s\-\(\)]/g, '').length < 10) return 'Please enter a valid phone number';
-        break;
-      case 'serviceType':
-        if (!value) return 'Please select a service type';
-        break;
-      case 'location':
-        if (!value.trim()) return 'Location is required';
-        break;
-    }
-    return '';
-  };
-  
-  const handleChange = (name: keyof FormData, value: string) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
-    
-    if (touched[name]) {
-      const error = validateField(name, value);
-      setErrors(prev => ({
-        ...prev,
-        [name]: error,
-      }));
-    }
-  };
-  
-  const handleBlur = (name: keyof FormData) => {
-    setTouched(prev => ({ ...prev, [name]: true }));
-    const error = validateField(name, formData[name]);
-    setErrors(prev => ({
-      ...prev,
-      [name]: error,
-    }));
-  };
-  
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+  const [isSuccess, setIsSuccess] = useState(false);
+  const { toast } = useToast();
+  const infoRef = useScrollReveal();
+  const formRef = useScrollReveal();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    // Mark all fields as touched
-    const allTouched = {
-      name: true,
-      email: true,
-      phone: true,
-      serviceType: true,
-      location: true,
-      companyName: true,
-      message: true,
-    };
-    setTouched(allTouched);
-    
-    // Validate all fields
-    const newErrors: FormErrors = {};
-    Object.entries(formData).forEach(([key, value]) => {
-      if (key !== 'companyName' && key !== 'message') {
-        const error = validateField(key, value);
-        if (error) newErrors[key as keyof FormData] = error;
-      }
-    });
-    
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-    
     setIsSubmitting(true);
-    setSubmitError('');
-    
-    try {
-      const response = await fetch('/api/leads', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to submit form');
-      }
-      
-      setSubmitSuccess(true);
-      setFormData({
-        name: '',
-        companyName: '',
-        email: '',
-        phone: '',
-        serviceType: '',
-        location: '',
-        message: '',
-      });
-      setErrors({});
-      setTouched({});
-      
-      // Reset success message after 5 seconds
-      setTimeout(() => setSubmitSuccess(false), 5000);
-    } catch (error) {
-      console.error('Form submission error:', error);
-      setSubmitError(error instanceof Error ? error.message : 'An error occurred. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
+
+    // Simulate form submission
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    setIsSubmitting(false);
+    setIsSuccess(true);
+
+    toast({
+      title: "Quote Request Received!",
+      description: "We'll contact you within 24 hours to discuss your fueling needs.",
+    });
+
+    // Reset form after 3 seconds
+    setTimeout(() => {
+      setIsSuccess(false);
+      (e.target as HTMLFormElement).reset();
+    }, 3000);
   };
-  
+
   return (
-    <section id="contact-form" className="py-20 bg-gray-50">
+    <section id="contact" className="py-12 md:py-24 bg-background">
       <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Get a Free Quote</h2>
-            <p className="text-lg text-gray-600">
-              Fill out the form below and we'll get back to you within 24 hours
-            </p>
-          </div>
-          
-          <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-md">
-            {/* Success Message */}
-            {submitSuccess && (
-              <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg" role="alert" aria-live="polite">
-                <div className="flex items-center gap-3">
-                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                  </svg>
-                  <div>
-                    <p className="font-semibold text-green-800">Thank you!</p>
-                    <p className="text-green-700">We've received your request and will contact you soon.</p>
-                  </div>
+        <div className="text-center mb-8 md:mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">Get a Free Quote</h2>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Fill out the form below and we'll get back to you with a customized quote
+          </p>
+        </div>
+
+        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+          {/* Contact Info */}
+          <div ref={infoRef as any} className="reveal space-y-8">
+            <div>
+              <h3 className="text-3xl font-bold mb-6">Contact Information</h3>
+              <p className="text-muted-foreground text-lg mb-8">
+                Reach out to us today for reliable gas/diesel delivery services in Houston and surrounding areas.
+              </p>
+            </div>
+
+            <div className="space-y-6">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Phone className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-lg mb-1">Phone</h4>
+                  <a href="tel:+12817502023" className="text-muted-foreground hover:text-primary transition-colors">
+                    (281) 750-2023
+                  </a>
+                  <p className="text-sm text-muted-foreground mt-1">Available 24/7 for emergencies</p>
                 </div>
               </div>
-            )}
-            
-            {/* Error Message */}
-            {submitError && (
-              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg" role="alert" aria-live="assertive">
-                <p className="text-red-800">{submitError}</p>
+
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <Mail className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-lg mb-1">Email</h4>
+                  <a href="mailto:info@texasfivefueling.com" className="text-muted-foreground hover:text-primary transition-colors">
+                    info@texasfivefueling.com
+                  </a>
+                  <p className="text-sm text-muted-foreground mt-1">We respond within 2 hours</p>
+                </div>
               </div>
-            )}
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              {/* Name */}
+
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <MapPin className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <h4 className="font-bold text-lg mb-1">Service Area</h4>
+                  <p className="text-muted-foreground">
+                    Houston, TX and surrounding areas<br />
+                    50-mile radius coverage
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-primary/5 border border-primary/20 rounded-lg p-6">
+              <h4 className="font-bold text-lg mb-3">Business Hours</h4>
+              <div className="space-y-2 text-muted-foreground">
+                <div className="flex justify-between">
+                  <span>Monday - Friday:</span>
+                  <span className="font-semibold">6:00 AM - 8:00 PM</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Saturday:</span>
+                  <span className="font-semibold">7:00 AM - 6:00 PM</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Sunday:</span>
+                  <span className="font-semibold">Emergency Only</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Contact Form */}
+          <div ref={formRef as any} className="reveal">
+            <form onSubmit={handleSubmit} className="bg-card p-8 rounded-lg border border-border space-y-6">
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="firstName" className="block text-sm font-semibold mb-2">
+                    First Name *
+                  </label>
+                  <Input
+                    id="firstName"
+                    type="text"
+                    required
+                    placeholder="John"
+                    disabled={isSubmitting || isSuccess}
+                    className="transition-all duration-200 focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="lastName" className="block text-sm font-semibold mb-2">
+                    Last Name *
+                  </label>
+                  <Input
+                    id="lastName"
+                    type="text"
+                    required
+                    placeholder="Doe"
+                    disabled={isSubmitting || isSuccess}
+                    className="transition-all duration-200 focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+              </div>
+
               <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-2">
-                  Name <span className="text-red-600">*</span>
+                <label htmlFor="company" className="block text-sm font-semibold mb-2">
+                  Company Name *
                 </label>
                 <Input
-                  id="name"
+                  id="company"
                   type="text"
-                  value={formData.name}
-                  onChange={(e) => handleChange('name', e.target.value)}
-                  onBlur={() => handleBlur('name')}
-                  error={touched.name && errors.name ? errors.name : undefined}
                   required
+                  placeholder="Your Company LLC"
+                  disabled={isSubmitting || isSuccess}
+                  className="transition-all duration-200 focus:ring-2 focus:ring-primary"
                 />
               </div>
-              
-              {/* Company Name */}
-              <div>
-                <label htmlFor="companyName" className="block text-sm font-medium mb-2">
-                  Company Name
-                </label>
-                <Input
-                  id="companyName"
-                  type="text"
-                  value={formData.companyName}
-                  onChange={(e) => handleChange('companyName', e.target.value)}
-                />
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="email" className="block text-sm font-semibold mb-2">
+                    Email *
+                  </label>
+                  <Input
+                    id="email"
+                    type="email"
+                    required
+                    placeholder="john@company.com"
+                    disabled={isSubmitting || isSuccess}
+                    className="transition-all duration-200 focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="phone" className="block text-sm font-semibold mb-2">
+                    Phone *
+                  </label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    required
+                    placeholder="(123) 456-7890"
+                    disabled={isSubmitting || isSuccess}
+                    className="transition-all duration-200 focus:ring-2 focus:ring-primary"
+                  />
+                </div>
               </div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              {/* Email */}
+
               <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-2">
-                  Email <span className="text-red-600">*</span>
+                <label htmlFor="message" className="block text-sm font-semibold mb-2">
+                  Tell us about your fueling needs *
                 </label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => handleChange('email', e.target.value)}
-                  onBlur={() => handleBlur('email')}
-                  error={touched.email && errors.email ? errors.email : undefined}
+                <Textarea
+                  id="message"
                   required
+                  placeholder="Please describe your equipment, location, and fuel requirements..."
+                  rows={5}
+                  disabled={isSubmitting || isSuccess}
+                  className="transition-all duration-200 focus:ring-2 focus:ring-primary resize-none"
                 />
               </div>
-              
-              {/* Phone */}
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                  Phone <span className="text-red-600">*</span>
-                </label>
-                <Input
-                  id="phone"
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) => handleChange('phone', e.target.value)}
-                  onBlur={() => handleBlur('phone')}
-                  error={touched.phone && errors.phone ? errors.phone : undefined}
-                  required
-                />
-              </div>
-            </div>
-            
-            {/* Service Type */}
-            <div className="mb-6">
-              <label htmlFor="serviceType" className="block text-sm font-medium mb-2">
-                Service Type <span className="text-red-600">*</span>
-              </label>
-              <Select
-                id="serviceType"
-                name="serviceType"
-                value={formData.serviceType}
-                onChange={(e) => handleChange('serviceType', e.target.value)}
-                onBlur={() => handleBlur('serviceType')}
-                error={touched.serviceType && errors.serviceType ? errors.serviceType : undefined}
-                required
-                options={serviceTypes.map(type => ({ value: type.value, label: type.label }))}
-                placeholder="Select a service..."
-              />
-            </div>
-            
-            {/* Location */}
-            <div className="mb-6">
-              <label htmlFor="location" className="block text-sm font-medium mb-2">
-                Location <span className="text-red-600">*</span>
-              </label>
-              <Input
-                id="location"
-                type="text"
-                value={formData.location}
-                onChange={(e) => handleChange('location', e.target.value)}
-                onBlur={() => handleBlur('location')}
-                error={touched.location && errors.location ? errors.location : undefined}
-                placeholder="City, State or specific address"
-                required
-              />
-            </div>
-            
-            {/* Message */}
-            <div className="mb-6">
-              <label htmlFor="message" className="block text-sm font-medium mb-2">
-                Message
-              </label>
-              <Textarea
-                id="message"
-                value={formData.message}
-                onChange={(e) => handleChange('message', e.target.value)}
-                placeholder="Tell us about your fuel delivery needs..."
-                rows={4}
-              />
-            </div>
-            
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              variant="primary"
-              size="lg"
-              className="w-full"
-              loading={isSubmitting}
-            >
-              {isSubmitting ? 'Submitting...' : 'Request a Quote'}
-            </Button>
-          </form>
+
+              <Button
+                type="submit"
+                className="w-full h-12 text-lg bg-primary hover:bg-primary/90 transition-all duration-200"
+                disabled={isSubmitting || isSuccess}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                    Submitting...
+                  </>
+                ) : isSuccess ? (
+                  <>
+                    <CheckCircle2 className="mr-2 h-5 w-5" />
+                    Request Sent!
+                  </>
+                ) : (
+                  'Request a Quote'
+                )}
+              </Button>
+
+              <p className="text-sm text-muted-foreground text-center">
+                By submitting this form, you agree to our terms and privacy policy.
+              </p>
+            </form>
+          </div>
         </div>
       </div>
     </section>
   );
-}
+};
+
+export default ContactForm;

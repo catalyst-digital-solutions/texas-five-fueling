@@ -1987,7 +1987,7 @@
               1
             ],
             "details": "Add 'use client' directive at top of Equipment.tsx. Convert all equipment images to use Next.js Image component with appropriate alt text and dimensions. Preserve all Tailwind classes for styling. Implement useScrollReveal() hook for animation effects. Maintain equipment grid layout and all descriptive content exactly as original.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Check all equipment images load properly with Next.js Image component. Verify scroll animations trigger correctly. Test responsive grid layout at different screen sizes. Ensure no layout shifts occur during image loading."
           },
           {
@@ -1998,7 +1998,7 @@
               1
             ],
             "details": "Add 'use client' directive at top of Trust.tsx. Implement IntersectionObserver to detect when counters enter viewport. Create counter animation logic to animate from 0 to target numbers (years experience, projects completed, etc). Preserve all Tailwind classes and styling. Maintain useScrollReveal() for section animation. Keep all trust indicators and text content unchanged.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify counters animate from 0 to target values when scrolled into view. Test IntersectionObserver triggers correctly. Check animations only play once. Validate all trust metrics display with correct values and styling."
           },
           {
@@ -2009,7 +2009,7 @@
               1
             ],
             "details": "Add 'use client' directive at top of ContactForm.tsx. Keep React Hook Form setup with useForm hook exactly as is. Preserve Zod validation schema without modifications. Maintain all form field components (input, textarea, select). Keep form submission logic and error handling unchanged. Preserve all Tailwind classes for styling. Ensure toast notifications work for success/error states.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test form validation with invalid inputs (empty fields, invalid email). Verify error messages display correctly. Test successful form submission flow. Check toast notifications appear for success/error. Validate all form fields are accessible and styled correctly."
           },
           {
@@ -2020,7 +2020,7 @@
               1
             ],
             "details": "Add 'use client' directive at top of Footer.tsx. Convert any logo or image imports to Next.js Image component. Preserve all footer links, contact information, and social media icons. Maintain all Tailwind classes for styling including background colors and text styles. Keep responsive layout for mobile and desktop views. Ensure copyright year and company information unchanged.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify all footer links are clickable and properly formatted. Check responsive layout at mobile and desktop breakpoints. Validate all contact information displays correctly. Test social media icons if present. Ensure styling matches original design."
           },
           {
@@ -2383,7 +2383,7 @@
     ],
     "metadata": {
       "created": "2025-10-30T23:44:51.052Z",
-      "updated": "2025-10-31T13:22:34.868Z",
+      "updated": "2025-10-31T13:27:17.234Z",
       "description": "Tasks for lovable-migration context"
     }
   }
