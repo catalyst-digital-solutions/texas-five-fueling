@@ -1,58 +1,47 @@
-import React from 'react';
+import * as React from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
 
-type ButtonProps = {
-  children: React.ReactNode;
-  type?: 'button' | 'submit' | 'reset';
-  variant?: 'primary' | 'secondary' | 'outline';
-  size?: 'sm' | 'md' | 'lg';
-  loading?: boolean;
-  className?: string;
-  onClick?: () => void;
-};
+import { cn } from "@/lib/utils";
 
-export default function Button({
-  children,
-  type = 'button',
-  variant = 'primary',
-  size = 'md',
-  loading = false,
-  className = '',
-  onClick,
-  ...props
-}: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) {
-  const baseStyles = 'font-medium rounded transition-all duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-offset-2 transform active:scale-95 motion-reduce:transition-none motion-reduce:transform-none disabled:opacity-50 disabled:cursor-not-allowed';
-  
-  const variantStyles = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-md focus:ring-blue-500',
-    secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 hover:shadow-md focus:ring-gray-500',
-    outline: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50 hover:shadow-md focus:ring-blue-500 bg-transparent',
-  };
-  
-  const sizeStyles = {
-    sm: 'py-2 px-4 text-sm min-h-[44px] min-w-[44px]',
-    md: 'py-3 px-5 text-base min-h-[44px]',
-    lg: 'py-4 px-6 text-lg min-h-[48px]',
-  };
-  
-  return (
-    <button
-      type={type}
-      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${loading ? 'opacity-70 cursor-wait' : ''} ${className}`}
-      onClick={onClick}
-      disabled={loading || props.disabled}
-      aria-busy={loading}
-      {...props}
-    >
-      {loading ? (
-        <span className="flex items-center justify-center">
-          <svg className="animate-spin -ml-1 mr-2 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
-          </svg>
-          Loading...
-        </span>
-      ) : children}
-    </button>
-  );
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
+        outline: "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-10 px-4 py-2",
+        sm: "h-9 rounded-md px-3",
+        lg: "h-11 rounded-md px-8",
+        icon: "h-10 w-10",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  },
+);
+
+export interface ButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
 }
 
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
+    const Comp = asChild ? Slot : "button";
+    return <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />;
+  },
+);
+Button.displayName = "Button";
+
+export { Button, buttonVariants };
