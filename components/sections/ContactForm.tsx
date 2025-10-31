@@ -22,6 +22,15 @@ const ContactForm = () => {
     try {
       const formData = new FormData(e.currentTarget);
       
+      // Honeypot spam protection - if this field is filled, it's a bot
+      const honeypot = formData.get('website') as string;
+      if (honeypot) {
+        // Silently reject bot submissions
+        setIsSubmitting(false);
+        console.warn('Bot submission detected via honeypot');
+        return;
+      }
+      
       // Combine first and last name
       const firstName = formData.get('firstName') as string;
       const lastName = formData.get('lastName') as string;
@@ -282,6 +291,18 @@ const ContactForm = () => {
                   rows={5}
                   disabled={isSubmitting || isSuccess}
                   className="transition-all duration-200 focus:ring-2 focus:ring-primary resize-none"
+                />
+              </div>
+
+              {/* Honeypot field - invisible to humans, bots will fill it */}
+              <div className="absolute left-[-9999px]" aria-hidden="true">
+                <label htmlFor="website">Website</label>
+                <input
+                  type="text"
+                  id="website"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
                 />
               </div>
 
