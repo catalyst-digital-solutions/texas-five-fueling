@@ -1,63 +1,116 @@
 'use client';
 
-import Link from 'next/link';
-import { Button } from '../ui/button';
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { Menu, X, Phone } from 'lucide-react';
 
-export default function Header() {
+const Header = () => {
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+      setIsMobileMenuOpen(false);
+    }
+  };
+
   return (
-    <header className="sticky top-0 z-50 bg-white shadow-md transition-shadow duration-200 motion-reduce:transition-none">
-      <div className="container mx-auto px-4 py-3">
-        <div className="flex justify-between items-center">
-          {/* Logo */}
-          <Link 
-            href="/" 
-            className="flex items-center group transition-transform duration-200 hover:scale-105 motion-reduce:transition-none motion-reduce:hover:scale-100"
-            aria-label="Texas Five Fueling Home"
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 ${
+        isScrolled ? 'shadow-md' : ''
+      }`}
+      style={{
+        transition: 'box-shadow 0.7s ease-in-out',
+      }}
+    >
+      <div 
+        className="absolute inset-0 bg-background/95 backdrop-blur-md transition-opacity duration-700 ease-in-out"
+        style={{ opacity: isScrolled ? 1 : 0 }}
+      />
+      <nav className="container mx-auto px-4 py-4 relative z-10">
+        <div className="flex items-center justify-between">
+          <button 
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="flex items-center cursor-pointer"
+            aria-label="Scroll to top"
           >
-            <div className="flex items-center">
-              <div className="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-xl shadow-sm">
-                T5F
-              </div>
-              <span className="ml-3 text-xl font-bold text-gray-900 hidden sm:block">
-                Texas Five Fueling
-              </span>
-            </div>
-          </Link>
+            <Image 
+              src={isScrolled ? "/images/header-logo.png" : "/images/header-logo-dark.png"}
+              alt="Texas Five Fueling Logo" 
+              width={200}
+              height={80}
+              className="h-[80px] w-auto transition-opacity duration-500"
+              priority
+            />
+          </button>
 
-          {/* Right Side Navigation */}
-          <div className="flex items-center gap-3">
-            {/* Phone Button - Hidden on mobile */}
-            <a 
-              href="tel:2817502023" 
-              className="hidden md:flex"
-              aria-label="Call Texas Five Fueling at (281) 750-2023"
-            >
-              <Button variant="outline" size="sm">
-                (281) 750-2023
-              </Button>
-            </a>
-            
-            {/* Get Quote Button */}
-            <Link href="#contact-form">
-              <Button variant="default" size="sm">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-8">
+            <button onClick={() => scrollToSection('services')} className={`transition-colors duration-200 ${isScrolled ? 'text-foreground hover:text-primary' : 'text-white hover:text-white/80'}`}>
+              Services
+            </button>
+            <button onClick={() => scrollToSection('coverage')} className={`transition-colors duration-200 ${isScrolled ? 'text-foreground hover:text-primary' : 'text-white hover:text-white/80'}`}>
+              Service Area
+            </button>
+            <button onClick={() => scrollToSection('equipment')} className={`transition-colors duration-200 ${isScrolled ? 'text-foreground hover:text-primary' : 'text-white hover:text-white/80'}`}>
+              Equipment
+            </button>
+            <button onClick={() => scrollToSection('contact')} className={`transition-colors duration-200 ${isScrolled ? 'text-foreground hover:text-primary' : 'text-white hover:text-white/80'}`}>
+              Contact
+            </button>
+            <Button onClick={() => scrollToSection('contact')} className="bg-primary hover:bg-primary/90">
+              <Phone className="mr-2 h-4 w-4" />
+              Get a Quote
+            </Button>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            className={`md:hidden p-2 ${isScrolled ? 'text-foreground' : 'text-white'}`}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden mt-4 pb-4 border-t border-border pt-4 animate-fade-in bg-background rounded-b-lg px-2">
+            <div className="flex flex-col gap-4">
+              <button onClick={() => scrollToSection('services')} className="text-left text-foreground hover:text-primary transition-colors">
+                Services
+              </button>
+              <button onClick={() => scrollToSection('coverage')} className="text-left text-foreground hover:text-primary transition-colors">
+                Service Area
+              </button>
+              <button onClick={() => scrollToSection('equipment')} className="text-left text-foreground hover:text-primary transition-colors">
+                Equipment
+              </button>
+              <button onClick={() => scrollToSection('contact')} className="text-left text-foreground hover:text-primary transition-colors">
+                Contact
+              </button>
+              <Button onClick={() => scrollToSection('contact')} className="w-full bg-primary hover:bg-primary/90">
+                <Phone className="mr-2 h-4 w-4" />
                 Get a Quote
               </Button>
-            </Link>
-
-            {/* Mobile Phone Link */}
-            <a 
-              href="tel:2817502023" 
-              className="md:hidden flex items-center justify-center min-w-[44px] min-h-[44px] rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 motion-reduce:transition-none"
-              aria-label="Call us"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-            </a>
+            </div>
           </div>
-        </div>
-      </div>
+        )}
+      </nav>
     </header>
   );
-}
+};
 
+export default Header;

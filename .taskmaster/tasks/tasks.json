@@ -1935,7 +1935,7 @@
         "dependencies": [
           2
         ],
-        "status": "pending",
+        "status": "in-progress",
         "subtasks": [
           {
             "id": 1,
@@ -1943,7 +1943,7 @@
             "description": "Set up the complete components directory structure with sections and layout folders to organize all migrated components",
             "dependencies": [],
             "details": "Create components/ directory with two subdirectories: components/sections/ for Hero, Services, ServiceArea, Equipment, Trust, and ContactForm components, and components/layout/ for Header and Footer components. Ensure proper directory structure before starting component migration.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify directory structure exists with correct paths: components/sections/ and components/layout/. Check that all component file paths are accessible and match the planned structure."
           },
           {
@@ -1954,7 +1954,7 @@
               1
             ],
             "details": "Add 'use client' directive at top of Header.tsx. Implement useState for mobile menu toggle. Convert all navigation links to use smooth scroll with href='#section-id'. Apply sticky positioning with backdrop-blur effect. Preserve all Tailwind classes exactly as in Lovable version. Ensure mobile menu opens/closes properly with hamburger icon.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Test mobile menu opens and closes on click. Verify smooth scroll navigation to each section. Check sticky header with backdrop-blur on scroll. Test responsive behavior at different breakpoints."
           },
           {
@@ -1965,7 +1965,7 @@
               1
             ],
             "details": "Add 'use client' directive at top of Hero.tsx. Convert static image imports to Next.js Image component with fill and priority props. Implement responsive images using hero-bg.jpg for desktop, hero-bg-tablet.jpg for tablet, and hero-bg-mobile.jpg for mobile. Preserve all Tailwind classes and maintain useScrollReveal() hook for animations. Keep all text content exactly as in original.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify correct image loads at each breakpoint (mobile < 768px, tablet 768-1024px, desktop > 1024px). Check scroll reveal animations trigger properly. Ensure image has priority loading and no layout shift."
           },
           {
@@ -1976,7 +1976,7 @@
               1
             ],
             "details": "Add 'use client' directive at top of both Services.tsx and ServiceArea.tsx files. Convert any static image imports to Next.js Image components. Preserve all Tailwind classes exactly. Maintain useScrollReveal() calls for animation effects. Keep all service descriptions, icons, and content unchanged. Ensure grid layouts and responsive behavior match original.",
-            "status": "pending",
+            "status": "done",
             "testStrategy": "Verify grid layouts display correctly at all breakpoints. Test scroll animations trigger for both sections. Check all service cards render with correct icons and text. Validate responsive behavior matches Lovable version."
           },
           {
@@ -2383,7 +2383,7 @@
     ],
     "metadata": {
       "created": "2025-10-30T23:44:51.052Z",
-      "updated": "2025-10-31T01:43:26.738Z",
+      "updated": "2025-10-31T13:22:34.868Z",
       "description": "Tasks for lovable-migration context"
     }
   }
