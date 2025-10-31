@@ -2,7 +2,6 @@
 
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Phone } from 'lucide-react';
-import Image from 'next/image';
 
 const Hero = () => {
   const scrollToContact = () => {
@@ -17,31 +16,25 @@ const Hero = () => {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         {/* Mobile image */}
-        <Image
+        <img
           src="/images/hero-bg-mobile.jpg"
           alt="Commercial diesel fuel delivery truck"
-          fill
-          className="object-cover md:hidden"
-          priority
-          sizes="100vw"
+          className="absolute inset-0 w-full h-full object-cover md:hidden"
+          loading="eager"
         />
         {/* Tablet portrait image */}
-        <Image
+        <img
           src="/images/hero-bg-tablet.jpg"
           alt="Commercial diesel fuel delivery truck"
-          fill
-          className="hidden md:block lg:hidden object-cover"
-          priority
-          sizes="100vw"
+          className="absolute inset-0 w-full h-full hidden md:block lg:hidden object-cover"
+          loading="eager"
         />
         {/* Desktop image */}
-        <Image
+        <img
           src="/images/hero-bg.jpg"
           alt="Commercial diesel fuel delivery truck"
-          fill
-          className="hidden lg:block object-cover"
-          priority
-          sizes="100vw"
+          className="absolute inset-0 w-full h-full hidden lg:block object-cover"
+          loading="eager"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-black/40 to-transparent"></div>
       </div>
