@@ -6,7 +6,8 @@ import { useScrollReveal } from '@/hooks/useScrollReveal';
 const cities = [
   'Houston', 'Katy', 'Sugar Land', 'The Woodlands', 'Pearland',
   'League City', 'Cypress', 'Spring', 'Pasadena', 'Baytown',
-  'Missouri City', 'Friendswood', 'Deer Park', 'Stafford', 'Richmond'
+  'Missouri City', 'Friendswood', 'Deer Park', 'Stafford', 'Richmond',
+  'Hempstead', 'Waller', 'Navasota', 'College Station', 'Bryan'
 ];
 
 const ServiceArea = () => {
@@ -14,7 +15,7 @@ const ServiceArea = () => {
   const rightRef = useScrollReveal();
 
   return (
-    <section id="coverage" className="py-12 md:py-24 bg-background">
+    <section id="coverage" className="py-12 md:py-24 bg-background scroll-mt-14 md:scroll-mt-32">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div ref={leftRef as any} className="reveal">

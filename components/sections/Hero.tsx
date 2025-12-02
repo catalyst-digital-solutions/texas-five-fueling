@@ -55,7 +55,7 @@ const Hero = () => {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
               <Button asChild size="lg" variant="outline" className="bg-white/10 backdrop-blur-sm text-white border-white hover:bg-white/20 text-lg px-8">
-                <a href="tel:+12817502023">
+                <a href="tel:+18558953835">
                   <Phone className="mr-2 h-5 w-5" />
                   Call Now
                 </a>

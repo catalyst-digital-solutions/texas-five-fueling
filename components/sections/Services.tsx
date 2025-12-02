@@ -1,6 +1,6 @@
 'use client';
 
-import { Truck, Building2, HardHat, Zap, Clock } from 'lucide-react';
+import { Truck, Building2, HardHat, Zap, Clock, MapPin, Droplet } from 'lucide-react';
 import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 const services = [
@@ -29,11 +29,21 @@ const services = [
     title: 'Scheduled Service',
     description: 'Set up regular delivery schedules to ensure your operations never run out of fuel.',
   },
+  {
+    icon: MapPin,
+    title: 'On-site Business Fueling',
+    description: 'Location fueling for businesses that keep tanks on-site—scheduled deliveries keep your equipment ready.',
+  },
+  {
+    icon: Droplet,
+    title: 'On-site Fuel Tanks Available',
+    description: 'We can deploy, monitor, and refill on-site tanks so you always have a reliable fuel reserve.',
+  },
 ];
 
 const Services = () => {
   return (
-    <section id="services" className="py-24 bg-muted">
+    <section id="services" className="py-24 bg-muted scroll-mt-14 md:scroll-mt-32">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Our Services</h2>

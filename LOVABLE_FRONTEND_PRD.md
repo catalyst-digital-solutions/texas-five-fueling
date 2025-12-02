@@ -126,12 +126,12 @@ Plus:
 **Content:**
 - Logo: "T5F" in brand red, white background, rounded
 - Company name: "Texas Five Fueling" in dark text
-- Phone: "(281) 750-2023" with phone icon
+- Phone: "(855) 895-3835" with phone icon
 - CTA Button: "Get a Quote" (brand red)
 
 **Desktop Layout:**
 ```
-[Logo "T5F"] [Texas Five Fueling]     [Navigation: Services | Coverage | Equipment]     [(icon) (281) 750-2023]  [Get a Quote Button]
+[Logo "T5F"] [Texas Five Fueling]     [Navigation: Services | Coverage | Equipment]     [(icon) (855) 895-3835]  [Get a Quote Button]
 ```
 
 **Mobile Layout:**
@@ -172,7 +172,7 @@ Subheadline (Sans, xl/2xl/3xl):
 
 CTAs:
 [Get a Quote] (brand red, solid)
-[Call Now: (281) 750-2023] (white border, glassmorphism)
+[Call Now: (855) 895-3835] (white border, glassmorphism)
 
 Down arrow indicator (bottom center, animated bounce)
 ```
@@ -471,7 +471,7 @@ Happy Customers
 ```
 Contact Us
 
-📞 (281) 750-2023
+📞 (855) 895-3835
 ✉️ info@t5fueling.com
 📍 Hempstead, TX
 ```

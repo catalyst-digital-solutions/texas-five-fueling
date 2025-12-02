@@ -46,19 +46,6 @@ const equipmentTypes = [
     ]
   },
   {
-    title: 'Oil & Gas Equipment',
-    description: 'Fuel services for energy sector operations',
-    image: '/images/oil-gas.jpg',
-    detailedDescription: "Reliable diesel delivery for upstream, midstream, and downstream operations across the Houston energy corridor.",
-    items: [
-      'Drilling rigs & workover rigs',
-      'Pump jacks & wellhead equipment',
-      'Fracturing equipment',
-      'Pipeline construction equipment',
-      'Compression & pumping units'
-    ]
-  },
-  {
     title: 'Fleet & Commercial Vehicles',
     description: 'Bulk diesel delivery for vehicle fleets',
     image: '/images/fleet-vehicles.jpg',
@@ -98,6 +85,19 @@ const equipmentTypes = [
     ]
   },
   {
+    title: 'Live Events & Production',
+    description: 'Fuel delivery for concerts, festivals, and film shoots',
+    image: '/images/coachella-concert-festival.png',
+    detailedDescription: "Keep stages, lighting, and production trailers running with dedicated fueling for live events and temporary venues.",
+    items: [
+      'Concert generators & staging rigs',
+      'Festival lighting & sound towers',
+      'Film production generators',
+      'Mobile catering & support trailers',
+      'Temporary power for outdoor venues'
+    ]
+  },
+  {
     title: 'Industrial Equipment',
     description: 'Comprehensive fueling for industrial operations',
     image: '/images/industrial-equipment.jpg',
@@ -117,7 +117,7 @@ const Equipment = () => {
 
   return (
     <>
-      <section id="equipment" className="py-24 bg-muted">
+  <section id="equipment" className="py-24 bg-muted scroll-mt-14 md:scroll-mt-32">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">Equipment We Fuel</h2>

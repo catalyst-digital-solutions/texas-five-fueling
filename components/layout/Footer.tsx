@@ -66,6 +66,8 @@ const Footer = () => {
               <li>Fleet Fueling</li>
               <li>Construction Sites</li>
               <li>Heavy Equipment</li>
+              <li>On-site Business Fueling</li>
+              <li>On-site Fuel Tanks</li>
               <li>Emergency Delivery</li>
               <li>Scheduled Service</li>
             </ul>
@@ -75,9 +77,9 @@ const Footer = () => {
           <div>
             <h3 className="font-bold text-lg mb-4">Contact Us</h3>
             <div className="space-y-3">
-              <a href="tel:+12817502023" className="flex items-center gap-2 text-white/70 hover:text-white transition-colors">
+              <a href="tel:+18558953835" className="flex items-center gap-2 text-white/70 hover:text-white transition-colors">
                 <Phone className="w-4 h-4" />
-                (281) 750-2023
+                (855) 895-3835
               </a>
               <a href="mailto:info@texasfivefueling.com" className="flex items-center gap-2 text-white/70 hover:text-white transition-colors">
                 <Mail className="w-4 h-4" />

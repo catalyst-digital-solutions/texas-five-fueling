@@ -83,7 +83,7 @@ const ContactForm = () => {
   };
 
   return (
-    <section id="contact" className="py-12 md:py-24 bg-background">
+  <section id="contact" className="py-12 md:py-24 bg-background scroll-mt-14 md:scroll-mt-32">
       <div className="container mx-auto px-4">
         <div className="text-center mb-8 md:mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-4">Get a Free Quote</h2>
@@ -109,8 +109,8 @@ const ContactForm = () => {
                 </div>
                 <div>
                   <h4 className="font-bold text-lg mb-1">Phone</h4>
-                  <a href="tel:+12817502023" className="text-muted-foreground hover:text-primary transition-colors">
-                    (281) 750-2023
+                  <a href="tel:+18558953835" className="text-muted-foreground hover:text-primary transition-colors">
+                    (855) 895-3835
                   </a>
                   <p className="text-sm text-muted-foreground mt-1">Available 24/7 for emergencies</p>
                 </div>

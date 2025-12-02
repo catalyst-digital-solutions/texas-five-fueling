@@ -113,7 +113,7 @@ export default function RootLayout({
                 name: 'Texas Five Fueling',
                 description: '24/7 commercial diesel delivery for generators, equipment & job sites in Houston and surrounding areas.',
                 url: 'https://texasfivefueling.com',
-                telephone: '+1-281-750-2023',
+                telephone: '+1-855-895-3835',
                 email: 'info@texasfivefueling.com',
                 address: {
                   '@type': 'PostalAddress',

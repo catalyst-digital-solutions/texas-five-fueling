@@ -33,7 +33,7 @@ See attached `VISUAL-STRATEGY-FOR-TEXAS-FIVE-FUELING-LANDING-PAGE.md` for comple
 
 ### 1. Header (Sticky)
 - Logo: "T5F" badge + "Texas Five Fueling" text
-- Phone number: (281) 750-2023 (clickable `tel:` link)
+- Phone number: (855) 895-3835 (clickable `tel:` link)
 - CTA Button: "Get a Quote" (scrolls to contact form)
 - Mobile: Hamburger menu or simplified layout
 
@@ -46,7 +46,7 @@ See attached `VISUAL-STRATEGY-FOR-TEXAS-FIVE-FUELING-LANDING-PAGE.md` for comple
   - Subheadline (Sans, 18-24px): "24/7 diesel delivery for generators, equipment, and job sites. Serving Houston and surrounding areas with fast, dependable service."
   - Two CTAs:
     1. Primary (red `#a81b1b`): "Get a Quote" (scroll to form)
-    2. Secondary (white outline): "Call Now: (281) 750-2023" (with phone icon)
+    2. Secondary (white outline): "Call Now: (855) 895-3835" (with phone icon)
   - Subtle fade-in animation on load (300-500ms)
 - **Down arrow indicator** at bottom (subtle bounce animation)
 
@@ -214,7 +214,7 @@ interface LeadSubmissionBody {
 **Layout:** 3 columns (1 column on mobile)
 
 **Column 1 - Contact Us:**
-- Phone: (281) 750-2023 (clickable)
+- Phone: (855) 895-3835 (clickable)
 - Email: info@t5fueling.com (clickable)
 - Location: Hempstead, TX
 
