@@ -15,7 +15,7 @@ const ServiceArea = () => {
   const rightRef = useScrollReveal();
 
   return (
-    <section id="coverage" className="py-12 md:py-24 bg-background scroll-mt-14 md:scroll-mt-32">
+    <section id="coverage" className="py-12 md:py-24 bg-muted scroll-mt-14 md:scroll-mt-32">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div ref={leftRef as any} className="reveal">
