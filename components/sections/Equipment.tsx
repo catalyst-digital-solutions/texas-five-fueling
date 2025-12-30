@@ -117,7 +117,7 @@ const Equipment = () => {
 
   return (
     <>
-  <section id="equipment" className="py-24 bg-muted scroll-mt-14 md:scroll-mt-32">
+  <section id="equipment" className="py-24 bg-background scroll-mt-14 md:scroll-mt-32">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold mb-4">Equipment We Fuel</h2>
