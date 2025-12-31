@@ -49,7 +49,7 @@ export const metadata: Metadata = {
         url: '/images/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'Texas Five Fueling - Professional Diesel Delivery Services',
+        alt: 'Texas Five Fueling - Reliable Diesel Delivery Services',
       },
     ],
   },
