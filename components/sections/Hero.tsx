@@ -17,21 +17,21 @@ const Hero = () => {
       <div className="absolute inset-0 z-0">
         {/* Mobile image */}
         <img
-          src="/images/commercial-fuel-delivery-service-truck-tall-for-mobile-1.jpg"
+          src="/images/commercial-fuel-delivery-service-truck-tall-for-mobile-v2.jpg"
           alt="Commercial diesel fuel delivery truck with T5 logo"
           className="absolute inset-0 w-full h-full object-cover md:hidden"
           loading="eager"
         />
         {/* Tablet portrait image */}
         <img
-          src="/images/commercial-fuel-delivery-service-truck-midsize-for-tablet.jpg"
+          src="/images/commercial-fuel-delivery-service-truck-midsize-for-tablet-v2.jpg"
           alt="Commercial diesel fuel delivery truck with T5 logo"
           className="absolute inset-0 w-full h-full hidden md:block lg:hidden object-cover"
           loading="eager"
         />
         {/* Desktop image */}
         <img
-          src="/images/commercial-fuel-delivery-service-truck-wide-for-desktop.jpg"
+          src="/images/commercial-fuel-delivery-service-truck-wide-for-desktop-v2.jpg"
           alt="Commercial diesel fuel delivery truck with T5 logo"
           className="absolute inset-0 w-full h-full hidden lg:block object-cover"
           loading="eager"
